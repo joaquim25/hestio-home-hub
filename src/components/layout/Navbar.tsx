@@ -35,14 +35,54 @@ export function Navbar() {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith('/dashboard');
 
-  const navItems = [
-    { href: '/properties', label: 'Imóveis', icon: Building2 },
-    { href: '/payments', label: 'Pagamentos', icon: CreditCard },
-    { href: '/maintenance', label: 'Manutenção', icon: Wrench },
-    { href: '/documents', label: 'Documentos', icon: FileText },
-    { href: '/messages', label: 'Mensagens', icon: MessageSquare },
-  ];
+  // Role-specific navigation items
+  const getNavItems = (role: UserRole | undefined) => {
+    const commonItems = [
+      { href: '/messages', label: 'Mensagens', icon: MessageSquare },
+      { href: '/documents', label: 'Documentos', icon: FileText },
+    ];
 
+    switch (role) {
+      case 'tenant':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/payments', label: 'Pagamentos', icon: CreditCard },
+          { href: '/maintenance', label: 'Manutenção', icon: Wrench },
+          ...commonItems,
+        ];
+      case 'owner':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/properties', label: 'Imóveis', icon: Building2 },
+          { href: '/payments', label: 'Pagamentos', icon: CreditCard },
+          { href: '/maintenance', label: 'Manutenção', icon: Wrench },
+          { href: '/reports', label: 'Relatórios', icon: BarChart3 },
+          ...commonItems,
+        ];
+      case 'agent':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/properties', label: 'Imóveis', icon: Building2 },
+          { href: '/payments', label: 'Comissões', icon: CreditCard },
+          { href: '/reports', label: 'Relatórios', icon: BarChart3 },
+          ...commonItems,
+        ];
+      case 'manager':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/properties', label: 'Edifícios', icon: Building2 },
+          { href: '/maintenance', label: 'Manutenção', icon: Wrench },
+          { href: '/payments', label: 'Despesas', icon: CreditCard },
+          ...commonItems,
+        ];
+      default:
+        return [
+          { href: '/properties', label: 'Imóveis', icon: Building2 },
+        ];
+    }
+  };
+
+  const navItems = getNavItems(user?.role);
   const roles: UserRole[] = ['tenant', 'owner', 'agent', 'manager'];
 
   return (

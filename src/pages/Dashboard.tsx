@@ -3,6 +3,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { TenantDashboard } from '@/components/dashboard/TenantDashboard';
 import { OwnerDashboard } from '@/components/dashboard/OwnerDashboard';
+import { AgentDashboard } from '@/components/dashboard/AgentDashboard';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -104,101 +105,12 @@ export default function Dashboard() {
     );
   }
 
-  // Agent Dashboard (simplified)
+  // Agent Dashboard
   if (user?.role === 'agent') {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="font-display text-3xl font-bold text-foreground">
-              Olá, {user.name} 👋
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Painel do agente imobiliário
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-            <StatsCard
-              title="Imóveis Ativos"
-              value="12"
-              description="Em gestão"
-              icon={Building2}
-              variant="primary"
-            />
-            <StatsCard
-              title="Clientes"
-              value="8"
-              description="Proprietários geridos"
-              icon={Users}
-            />
-            <StatsCard
-              title="Comissões"
-              value="€2,450"
-              description="Este mês"
-              icon={DollarSign}
-              trend={{ value: 8, isPositive: true }}
-              variant="accent"
-            />
-            <StatsCard
-              title="Leads"
-              value="15"
-              description="Por contactar"
-              icon={MessageSquare}
-            />
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Agenda de Hoje</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-                    <Calendar className="h-5 w-5 text-primary" />
-                    <div>
-                      <p className="font-medium text-sm">Visita - T3 em Foz</p>
-                      <p className="text-xs text-muted-foreground">10:00 - Cliente: João Pereira</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-                    <Calendar className="h-5 w-5 text-primary" />
-                    <div>
-                      <p className="font-medium text-sm">Assinatura de Contrato</p>
-                      <p className="text-xs text-muted-foreground">15:00 - Apartamento Chiado</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Leads Recentes</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <div>
-                      <p className="font-medium text-sm">Ana Costa</p>
-                      <p className="text-xs text-muted-foreground">Procura T2 em Lisboa</p>
-                    </div>
-                    <Button size="sm" variant="outline">Contactar</Button>
-                  </div>
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <div>
-                      <p className="font-medium text-sm">Miguel Santos</p>
-                      <p className="text-xs text-muted-foreground">Investidor - até €200k</p>
-                    </div>
-                    <Button size="sm" variant="outline">Contactar</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+        <AgentDashboard user={user} />
       </div>
     );
   }

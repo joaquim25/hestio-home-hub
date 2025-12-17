@@ -5,28 +5,23 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { mockProperties, mockPayments, mockMaintenanceRequests, mockUsers } from '@/lib/mock-data';
 import { User } from '@/types';
+import { MetricCard } from './MetricCard';
+import { WelcomeHeader } from './WelcomeHeader';
 import {
   Building2,
   CreditCard,
   Wrench,
   TrendingUp,
   Plus,
-  MessageSquare,
-  FileText,
-  Calendar,
-  Users,
   Clock,
   AlertTriangle,
-  CheckCircle2,
   ArrowRight,
   Percent,
   Euro,
-  Home,
   UserCheck,
-  Bell,
-  BarChart3,
   MapPin,
   Eye,
+  BarChart3,
 } from 'lucide-react';
 import {
   AreaChart,
@@ -42,34 +37,24 @@ import {
 } from 'recharts';
 
 const revenueData = [
-  { month: 'Jul', value: 4200, expected: 4500 },
-  { month: 'Ago', value: 4800, expected: 4500 },
-  { month: 'Set', value: 4500, expected: 4500 },
-  { month: 'Out', value: 5200, expected: 4500 },
-  { month: 'Nov', value: 4900, expected: 4500 },
-  { month: 'Dez', value: 5400, expected: 4500 },
+  { month: 'Jul', value: 4200 },
+  { month: 'Ago', value: 4800 },
+  { month: 'Set', value: 4500 },
+  { month: 'Out', value: 5200 },
+  { month: 'Nov', value: 4900 },
+  { month: 'Dez', value: 5400 },
 ];
-
-const statusColors: Record<string, 'success' | 'warning' | 'default' | 'destructive'> = {
-  pending: 'warning',
-  'in-progress': 'default',
-  completed: 'success',
-  paid: 'success',
-  overdue: 'destructive',
-};
 
 interface OwnerDashboardProps {
   user: User;
 }
 
 export function OwnerDashboard({ user }: OwnerDashboardProps) {
-  // Owner's properties
   const ownerProperties = mockProperties.filter(p => p.ownerId === '2');
   const occupiedProperties = ownerProperties.filter(p => p.status === 'occupied');
   const availableProperties = ownerProperties.filter(p => p.status === 'available');
   const maintenanceProperties = ownerProperties.filter(p => p.status === 'maintenance');
   
-  // Financial data
   const allPayments = mockPayments;
   const paidPayments = allPayments.filter(p => p.status === 'paid');
   const pendingPayments = allPayments.filter(p => p.status === 'pending');
@@ -80,17 +65,13 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
   const overdueAmount = overduePayments.reduce((acc, p) => acc + p.amount, 0);
   const expectedMonthlyRevenue = ownerProperties.reduce((acc, p) => acc + p.price, 0);
   
-  // Maintenance
   const maintenanceRequests = mockMaintenanceRequests;
   const pendingMaintenance = maintenanceRequests.filter(m => m.status === 'pending');
-  const inProgressMaintenance = maintenanceRequests.filter(m => m.status === 'in-progress');
   
-  // Occupancy rate
   const occupancyRate = ownerProperties.length > 0 
     ? Math.round((occupiedProperties.length / ownerProperties.length) * 100) 
     : 0;
 
-  // Pie chart data for property status
   const propertyStatusData = [
     { name: 'Ocupados', value: occupiedProperties.length, color: 'hsl(var(--success))' },
     { name: 'Disponíveis', value: availableProperties.length, color: 'hsl(var(--primary))' },
@@ -98,17 +79,14 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
   ].filter(d => d.value > 0);
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="font-display text-3xl font-bold text-foreground">
-            Olá, {user.name}! 👋
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Visão geral do seu portfolio imobiliário
-          </p>
-        </div>
+      <div className="flex items-center justify-between">
+        <WelcomeHeader 
+          name={user.name} 
+          subtitle="Visão geral do seu portfolio imobiliário" 
+          className="mb-0"
+        />
         <div className="flex gap-3">
           <Link to="/reports">
             <Button variant="outline">
@@ -125,118 +103,77 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
         </div>
       </div>
 
-      {/* Alert Banner for Overdue Payments */}
+      {/* Alert Banner */}
       {overduePayments.length > 0 && (
-        <Card className="mb-6 border-l-4 border-l-destructive bg-destructive/5">
-          <CardContent className="py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+        <div className="glass-card p-4 rounded-2xl border-l-4 border-l-destructive">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-destructive/10">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
-                <div>
-                  <p className="font-medium">
-                    {overduePayments.length} pagamento(s) em atraso
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Total de €{overdueAmount.toLocaleString()} por receber
-                  </p>
-                </div>
               </div>
-              <Link to="/payments">
-                <Button size="sm" variant="destructive">
-                  Ver Detalhes
-                </Button>
-              </Link>
+              <div>
+                <p className="font-medium text-foreground">
+                  {overduePayments.length} pagamento(s) em atraso
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Total de €{overdueAmount.toLocaleString()} por receber
+                </p>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+            <Link to="/payments">
+              <Button size="sm" variant="destructive">
+                Ver Detalhes
+              </Button>
+            </Link>
+          </div>
+        </div>
       )}
 
-      {/* Main Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-        <Card className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full -mr-10 -mt-10" />
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Building2 className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-sm text-muted-foreground">Portfolio</span>
-            </div>
-            <p className="font-display text-3xl font-bold text-foreground">
-              {ownerProperties.length}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Imóveis • {occupiedProperties.length} ocupados
-            </p>
-          </CardContent>
-        </Card>
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <MetricCard
+          title="Portfolio"
+          value={ownerProperties.length}
+          subtitle={`Imóveis • ${occupiedProperties.length} ocupados`}
+          icon={Building2}
+          iconColor="primary"
+        />
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-lg bg-success/10">
-                <Euro className="h-5 w-5 text-success" />
-              </div>
-              <span className="text-sm text-muted-foreground">Receita Anual</span>
-            </div>
-            <p className="font-display text-3xl font-bold text-foreground">
-              €{totalRevenue.toLocaleString()}
-            </p>
-            <div className="flex items-center gap-1 mt-1">
-              <TrendingUp className="h-4 w-4 text-success" />
-              <span className="text-sm text-success font-medium">+12%</span>
-              <span className="text-sm text-muted-foreground">vs ano anterior</span>
-            </div>
-          </CardContent>
-        </Card>
+        <MetricCard
+          title="Receita Anual"
+          value={`€${totalRevenue.toLocaleString()}`}
+          icon={Euro}
+          iconColor="success"
+          trend={{ value: 12, isPositive: true }}
+        />
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-lg bg-accent/10">
-                <Percent className="h-5 w-5 text-accent-foreground" />
-              </div>
-              <span className="text-sm text-muted-foreground">Taxa Ocupação</span>
-            </div>
-            <p className="font-display text-3xl font-bold text-foreground">
-              {occupancyRate}%
-            </p>
-            <Progress value={occupancyRate} className="mt-2 h-2" />
-          </CardContent>
-        </Card>
+        <MetricCard
+          title="Taxa Ocupação"
+          value={`${occupancyRate}%`}
+          icon={Percent}
+          iconColor="accent"
+        >
+          <Progress value={occupancyRate} className="h-2" />
+        </MetricCard>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-lg bg-warning/10">
-                <Clock className="h-5 w-5 text-warning" />
-              </div>
-              <span className="text-sm text-muted-foreground">Por Receber</span>
-            </div>
-            <p className="font-display text-3xl font-bold text-foreground">
-              €{(pendingAmount + overdueAmount).toLocaleString()}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              {pendingPayments.length + overduePayments.length} pagamentos
-            </p>
-          </CardContent>
-        </Card>
+        <MetricCard
+          title="Por Receber"
+          value={`€${(pendingAmount + overdueAmount).toLocaleString()}`}
+          subtitle={`${pendingPayments.length + overduePayments.length} pagamentos`}
+          icon={Clock}
+          iconColor="warning"
+        />
       </div>
 
+      {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Revenue Chart */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 glass-card border-0">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Receita Mensal</CardTitle>
+                <CardTitle className="font-display">Receita Mensal</CardTitle>
                 <CardDescription>Evolução nos últimos 6 meses</CardDescription>
-              </div>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-primary" />
-                  <span className="text-muted-foreground">Recebido</span>
-                </div>
               </div>
             </div>
           </CardHeader>
@@ -250,14 +187,15 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
                       <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `€${v}`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `€${v}`} tickLine={false} axisLine={false} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
+                      borderRadius: '12px',
+                      boxShadow: 'var(--shadow-lg)',
                     }}
                     formatter={(value: number) => [`€${value.toLocaleString()}`, 'Receita']}
                   />
@@ -272,10 +210,10 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-            <div className="flex items-center justify-between mt-4 pt-4 border-t">
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
               <div>
                 <p className="text-sm text-muted-foreground">Receita Mensal Esperada</p>
-                <p className="font-display text-xl font-bold">€{expectedMonthlyRevenue.toLocaleString()}</p>
+                <p className="font-display text-xl font-semibold">€{expectedMonthlyRevenue.toLocaleString()}</p>
               </div>
               <Link to="/reports">
                 <Button variant="outline" size="sm">
@@ -288,9 +226,9 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
         </Card>
 
         {/* Property Status */}
-        <Card>
+        <Card className="glass-card border-0">
           <CardHeader>
-            <CardTitle>Estado dos Imóveis</CardTitle>
+            <CardTitle className="font-display">Estado dos Imóveis</CardTitle>
             <CardDescription>Distribuição atual</CardDescription>
           </CardHeader>
           <CardContent>
@@ -314,7 +252,7 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
+                      borderRadius: '12px',
                     }}
                   />
                 </PieChart>
@@ -347,10 +285,10 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
         </Card>
 
         {/* Properties List */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 glass-card border-0">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Os Seus Imóveis</CardTitle>
+              <CardTitle className="font-display">Os Seus Imóveis</CardTitle>
               <CardDescription>Gestão rápida do portfolio</CardDescription>
             </div>
             <Link to="/properties">
@@ -370,12 +308,12 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
                 return (
                   <div 
                     key={property.id} 
-                    className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors"
                   >
                     <img
                       src={property.images[0]}
                       alt={property.title}
-                      className="w-16 h-16 rounded-lg object-cover"
+                      className="w-16 h-16 rounded-xl object-cover"
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -396,7 +334,7 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="font-display font-bold text-primary">€{property.price}</p>
+                      <p className="font-display font-semibold text-primary">€{property.price}</p>
                       <p className="text-xs text-muted-foreground">/mês</p>
                     </div>
                     <Badge
@@ -417,9 +355,9 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
         </Card>
 
         {/* Quick Actions */}
-        <Card>
+        <Card className="glass-card border-0">
           <CardHeader>
-            <CardTitle className="text-lg">Ações Rápidas</CardTitle>
+            <CardTitle className="text-lg font-display">Ações Rápidas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <Link to="/properties/new" className="block">
@@ -437,128 +375,18 @@ export function OwnerDashboard({ user }: OwnerDashboardProps) {
             <Link to="/maintenance" className="block">
               <Button className="w-full justify-start h-11" variant="outline">
                 <Wrench className="h-4 w-4 mr-3" />
-                Ver Manutenções
+                Manutenções
               </Button>
             </Link>
-            <Link to="/messages" className="block">
+            <Link to="/reports" className="block">
               <Button className="w-full justify-start h-11" variant="outline">
-                <MessageSquare className="h-4 w-4 mr-3" />
-                Mensagens
+                <BarChart3 className="h-4 w-4 mr-3" />
+                Ver Relatórios
               </Button>
             </Link>
-            <Link to="/documents" className="block">
-              <Button className="w-full justify-start h-11" variant="outline">
-                <FileText className="h-4 w-4 mr-3" />
-                Documentos
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        {/* Recent Payments */}
-        <Card className="lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Pagamentos Recentes</CardTitle>
-              <CardDescription>Últimas transações dos inquilinos</CardDescription>
-            </div>
-            <Link to="/payments">
-              <Button variant="ghost" size="sm">
-                Ver Todos
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {allPayments.slice(0, 5).map((payment) => {
-                const property = mockProperties.find(p => p.id === payment.propertyId);
-                const tenant = mockUsers.find(u => u.id === payment.tenantId);
-                
-                return (
-                  <div key={payment.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <div className="flex items-center gap-3">
-                      {payment.status === 'paid' ? (
-                        <div className="p-2 rounded-full bg-success/10">
-                          <CheckCircle2 className="h-4 w-4 text-success" />
-                        </div>
-                      ) : payment.status === 'pending' ? (
-                        <div className="p-2 rounded-full bg-warning/10">
-                          <Clock className="h-4 w-4 text-warning" />
-                        </div>
-                      ) : (
-                        <div className="p-2 rounded-full bg-destructive/10">
-                          <AlertTriangle className="h-4 w-4 text-destructive" />
-                        </div>
-                      )}
-                      <div>
-                        <p className="font-medium text-sm">{property?.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {tenant?.name} • {new Date(payment.dueDate).toLocaleDateString('pt-PT')}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-display font-semibold">€{payment.amount}</p>
-                      <Badge variant={statusColors[payment.status]} className="text-xs">
-                        {payment.status === 'paid' ? 'Pago' : payment.status === 'pending' ? 'Pendente' : 'Em Atraso'}
-                      </Badge>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Maintenance Requests */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle className="text-lg">Manutenção</CardTitle>
-              <CardDescription>Pedidos ativos</CardDescription>
-            </div>
-            <Badge variant={pendingMaintenance.length > 0 ? 'warning' : 'success'}>
-              {pendingMaintenance.length + inProgressMaintenance.length} ativos
-            </Badge>
-          </CardHeader>
-          <CardContent>
-            {pendingMaintenance.length + inProgressMaintenance.length > 0 ? (
-              <div className="space-y-3">
-                {[...pendingMaintenance, ...inProgressMaintenance].slice(0, 3).map((request) => {
-                  const property = mockProperties.find(p => p.id === request.propertyId);
-                  
-                  return (
-                    <div key={request.id} className="p-3 rounded-lg border">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="font-medium text-sm truncate">{request.description}</p>
-                        <Badge 
-                          variant={request.status === 'pending' ? 'warning' : 'default'}
-                          className="text-xs"
-                        >
-                          {request.status === 'pending' ? 'Pendente' : 'Em Progresso'}
-                        </Badge>
-                      </div>
-                      <p className="text-xs text-muted-foreground">{property?.title}</p>
-                    </div>
-                  );
-                })}
-                <Link to="/maintenance">
-                  <Button variant="ghost" className="w-full mt-2">
-                    Ver Todos
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <div className="text-center py-6">
-                <CheckCircle2 className="h-10 w-10 text-success mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">Sem pedidos pendentes</p>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 }

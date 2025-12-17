@@ -156,14 +156,14 @@ export function CondoCompanyDashboard({ user }: CondoCompanyDashboardProps) {
   const overdueItems = mockComplianceItems.filter(c => c.status === 'overdue').length;
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-3xl font-bold text-foreground">
-            Olá, {user.name}! 👋
+          <h1 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">
+            Olá, {user.name}
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-2">
             Visão geral da empresa de gestão de condomínios
           </p>
         </div>
@@ -596,6 +596,6 @@ export function CondoCompanyDashboard({ user }: CondoCompanyDashboardProps) {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 }

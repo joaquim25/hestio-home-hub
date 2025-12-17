@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import {
   FileText,
   Upload,
@@ -9,7 +10,6 @@ import {
   Search,
   FileSignature,
   Clock,
-  CheckCircle2,
   MoreVertical,
   Home,
   Receipt,
@@ -118,8 +118,8 @@ export function TenantDocuments() {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-foreground">Os Meus Documentos</h1>
           <p className="text-muted-foreground mt-1">
@@ -133,72 +133,34 @@ export function TenantDocuments() {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-4 mb-8">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <FileText className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold font-display">{mockDocuments.length}</p>
-                <p className="text-sm text-muted-foreground">Total Documentos</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-success/10">
-                <FileSignature className="h-5 w-5 text-success" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold font-display">
-                  {mockDocuments.filter(d => d.type === 'lease').length}
-                </p>
-                <p className="text-sm text-muted-foreground">Contratos</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-accent/10">
-                <Receipt className="h-5 w-5 text-accent" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold font-display">
-                  {mockDocuments.filter(d => d.type === 'receipt').length}
-                </p>
-                <p className="text-sm text-muted-foreground">Recibos</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-warning/10">
-                <Clock className="h-5 w-5 text-warning" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold font-display">
-                  {mockDocuments.filter(d => d.status === 'pending').length}
-                </p>
-                <p className="text-sm text-muted-foreground">Pendentes</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid gap-4 md:grid-cols-4">
+        <MetricCard
+          title="Total Documentos"
+          value={mockDocuments.length}
+          icon={FileText}
+        />
+        <MetricCard
+          title="Contratos"
+          value={mockDocuments.filter(d => d.type === 'lease').length}
+          icon={FileSignature}
+        />
+        <MetricCard
+          title="Recibos"
+          value={mockDocuments.filter(d => d.type === 'receipt').length}
+          icon={Receipt}
+        />
+        <MetricCard
+          title="Pendentes"
+          value={mockDocuments.filter(d => d.status === 'pending').length}
+          icon={Clock}
+        />
       </div>
 
       {/* Pending Signatures Alert */}
       {mockDocuments.filter(d => d.status === 'pending').length > 0 && (
-        <Card className="mb-8 border-warning/50 bg-warning/5">
+        <Card className="glass-card border-warning/50 bg-gradient-to-r from-warning/5 to-transparent">
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-warning/10">
                   <Clock className="h-5 w-5 text-warning" />
@@ -217,10 +179,10 @@ export function TenantDocuments() {
       )}
 
       {/* Documents */}
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Biblioteca de Documentos</CardTitle>
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <CardTitle className="font-display">Biblioteca de Documentos</CardTitle>
             <div className="relative w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Pesquisar documentos..." className="pl-10" />
@@ -245,10 +207,10 @@ export function TenantDocuments() {
                     return (
                       <div
                         key={doc.id}
-                        className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors"
+                        className="flex items-center justify-between p-4 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/30 transition-colors"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="p-2 rounded-lg bg-muted">
+                          <div className="p-2 rounded-xl bg-muted/50">
                             <TypeIcon className="h-5 w-5 text-muted-foreground" />
                           </div>
                           <div>
@@ -294,6 +256,6 @@ export function TenantDocuments() {
           </Tabs>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }

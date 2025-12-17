@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import { mockMaintenanceRequests } from '@/lib/mock-data/maintenance';
 import { mockProperties } from '@/lib/mock-data/properties';
 import { 
@@ -15,7 +14,6 @@ import {
   Wrench, 
   Clock, 
   CheckCircle, 
-  AlertTriangle,
   Droplets,
   Zap,
   Wind,
@@ -87,11 +85,11 @@ export function TenantMaintenance() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Manutenção</h1>
-          <p className="text-muted-foreground">Reporte e acompanhe pedidos de manutenção</p>
+          <h1 className="font-display text-3xl font-bold text-foreground">Manutenção</h1>
+          <p className="text-muted-foreground mt-1">Reporte e acompanhe pedidos de manutenção</p>
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -103,7 +101,7 @@ export function TenantMaintenance() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Reportar Problema</DialogTitle>
+              <DialogTitle className="font-display">Reportar Problema</DialogTitle>
               <DialogDescription>
                 Descreva o problema de manutenção que precisa ser resolvido
               </DialogDescription>
@@ -164,7 +162,7 @@ export function TenantMaintenance() {
               </div>
               <div className="space-y-2">
                 <Label>Fotografias (opcional)</Label>
-                <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors">
+                <div className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer hover:bg-muted/30 transition-colors">
                   <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                   <p className="text-sm text-muted-foreground">
                     Clique ou arraste fotos do problema
@@ -186,24 +184,27 @@ export function TenantMaintenance() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
-        <StatsCard
+        <MetricCard
           title="Pendentes"
           value={pendingCount}
-          description="Aguardam resposta"
           icon={Clock}
-        />
-        <StatsCard
+        >
+          <p className="text-xs text-muted-foreground">Aguardam resposta</p>
+        </MetricCard>
+        <MetricCard
           title="Em Progresso"
           value={inProgressCount}
-          description="A ser resolvidos"
           icon={Wrench}
-        />
-        <StatsCard
+        >
+          <p className="text-xs text-muted-foreground">A ser resolvidos</p>
+        </MetricCard>
+        <MetricCard
           title="Concluídos"
           value={completedCount}
-          description="Este mês"
           icon={CheckCircle}
-        />
+        >
+          <p className="text-xs text-muted-foreground">Este mês</p>
+        </MetricCard>
       </div>
 
       {/* Filters */}
@@ -241,10 +242,12 @@ export function TenantMaintenance() {
       {/* Requests List */}
       <div className="space-y-4">
         {filteredRequests.length === 0 ? (
-          <Card>
+          <Card className="glass-card">
             <CardContent className="py-12 text-center">
-              <Wrench className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">Nenhum pedido encontrado</h3>
+              <div className="w-16 h-16 rounded-2xl bg-muted/50 mx-auto mb-4 flex items-center justify-center">
+                <Wrench className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <h3 className="font-display text-lg font-medium">Nenhum pedido encontrado</h3>
               <p className="text-muted-foreground">
                 Não existem pedidos de manutenção com este filtro
               </p>
@@ -254,11 +257,11 @@ export function TenantMaintenance() {
           filteredRequests.map((request) => {
             const CategoryIcon = categoryIcons[request.category];
             return (
-              <Card key={request.id}>
+              <Card key={request.id} className="glass-card">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     <div className="flex gap-4">
-                      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <CategoryIcon className="h-6 w-6 text-primary" />
                       </div>
                       <div className="space-y-1">

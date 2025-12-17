@@ -111,6 +111,66 @@ export default function Login() {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">Contas Demo</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('joao@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs"
+                >
+                  🏠 Inquilino
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('maria@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs"
+                >
+                  🏢 Proprietário
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('pedro@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs"
+                >
+                  🔑 Agente
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('ana@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs"
+                >
+                  🏛️ Gestor
+                </Button>
+              </div>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-card px-2 text-muted-foreground">Ou continue com</span>
                 </div>
               </div>

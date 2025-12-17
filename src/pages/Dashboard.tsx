@@ -5,6 +5,7 @@ import { TenantDashboard } from '@/components/dashboard/TenantDashboard';
 import { OwnerDashboard } from '@/components/dashboard/OwnerDashboard';
 import { AgentDashboard } from '@/components/dashboard/AgentDashboard';
 import { ManagerDashboard } from '@/components/dashboard/ManagerDashboard';
+import { CondoCompanyDashboard } from '@/components/dashboard/CondoCompanyDashboard';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -121,99 +122,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="font-display text-3xl font-bold text-foreground">
-              Olá, {user.name} 👋
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Painel de empresa de gestão de condomínios
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-            <StatsCard
-              title="Condomínios Geridos"
-              value="24"
-              description="Total de edifícios"
-              icon={Building2}
-              variant="primary"
-            />
-            <StatsCard
-              title="Gestores"
-              value="8"
-              description="Colaboradores ativos"
-              icon={Users}
-            />
-            <StatsCard
-              title="Receita Mensal"
-              value="€45,000"
-              description="Honorários de gestão"
-              icon={DollarSign}
-              trend={{ value: 15, isPositive: true }}
-              variant="accent"
-            />
-            <StatsCard
-              title="Conformidade"
-              value="98%"
-              description="Taxa de regularização"
-              icon={FileText}
-            />
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Condomínios por Gestor</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { name: 'Ana Ferreira', count: 5, revenue: '€9,500' },
-                    { name: 'Carlos Silva', count: 6, revenue: '€11,200' },
-                    { name: 'Maria Costa', count: 4, revenue: '€7,800' },
-                    { name: 'João Santos', count: 5, revenue: '€9,100' },
-                  ].map((manager) => (
-                    <div key={manager.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                      <div className="flex items-center gap-3">
-                        <Users className="h-5 w-5 text-muted-foreground" />
-                        <div>
-                          <p className="font-medium text-sm">{manager.name}</p>
-                          <p className="text-xs text-muted-foreground">{manager.count} condomínios</p>
-                        </div>
-                      </div>
-                      <span className="font-display font-semibold">{manager.revenue}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Tarefas Pendentes</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg border border-warning/50 bg-warning/10">
-                    <div className="flex items-center gap-2 mb-2">
-                      <AlertTriangle className="h-4 w-4 text-warning" />
-                      <span className="font-medium">Relatórios Financeiros</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">3 condomínios com relatórios por enviar</p>
-                  </div>
-                  <div className="p-4 rounded-lg border">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <span className="font-medium">Assembleias Marcadas</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">5 reuniões esta semana</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+        <CondoCompanyDashboard user={user} />
       </div>
     );
   }

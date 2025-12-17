@@ -124,12 +124,12 @@ export function Navbar() {
   const roles: UserRole[] = ['tenant', 'owner', 'agent', 'manager', 'condo_company', 'vendor', 'government'];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-border/50 bg-card/70 backdrop-blur-xl">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-hero">
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-soft">
               <Home className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="font-display text-xl font-bold text-foreground">Hestio</span>
@@ -142,7 +142,7 @@ export function Navbar() {
                 <Button
                   variant={location.pathname === item.href ? 'secondary' : 'ghost'}
                   size="sm"
-                  className="gap-2"
+                  className="gap-2 rounded-xl"
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
@@ -157,14 +157,14 @@ export function Navbar() {
             {isAuthenticated && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="hidden sm:flex gap-2">
+                  <Button variant="outline" size="sm" className="hidden sm:flex gap-2 rounded-xl bg-card/60 backdrop-blur-sm">
                     <Badge variant={roleColors[user?.role || 'tenant']} className="text-xs">
                       {roleLabels[user?.role || 'tenant']}
                     </Badge>
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border-border/50">
                   <DropdownMenuLabel className="text-xs text-muted-foreground">
                     Mudar Perfil (Demo)
                   </DropdownMenuLabel>
@@ -188,15 +188,15 @@ export function Navbar() {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                  <Button variant="ghost" size="icon" className="relative rounded-xl">
+                    <Avatar className="h-9 w-9">
+                      <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
                         {user?.name?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-card/95 backdrop-blur-xl border-border/50">
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <span className="font-medium">{user?.name}</span>
@@ -233,10 +233,10 @@ export function Navbar() {
             ) : (
               <div className="flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" size="sm">Entrar</Button>
+                  <Button variant="ghost" size="sm" className="rounded-xl">Entrar</Button>
                 </Link>
                 <Link to="/register">
-                  <Button size="sm">Começar Grátis</Button>
+                  <Button size="sm" className="rounded-xl shadow-soft">Começar Grátis</Button>
                 </Link>
               </div>
             )}
@@ -245,7 +245,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden rounded-xl"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -255,13 +255,13 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         {isOpen && isAuthenticated && (
-          <div className="md:hidden border-t py-4 animate-fade-in">
+          <div className="md:hidden border-t border-border/50 py-4 animate-fade-in">
             <div className="flex flex-col gap-1">
               {navItems.map((item) => (
                 <Link key={item.href} to={item.href} onClick={() => setIsOpen(false)}>
                   <Button
                     variant={location.pathname === item.href ? 'secondary' : 'ghost'}
-                    className="w-full justify-start gap-2"
+                    className="w-full justify-start gap-2 rounded-xl"
                   >
                     <item.icon className="h-4 w-4" />
                     {item.label}

@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { mockMaintenanceRequests } from '@/lib/mock-data/maintenance';
 import { mockProperties } from '@/lib/mock-data/properties';
@@ -97,8 +97,8 @@ export function ManagerMaintenance() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Manutenção</h1>
-          <p className="text-muted-foreground">Gestão de manutenção e fornecedores do edifício</p>
+          <h1 className="font-display text-3xl font-bold text-foreground">Manutenção</h1>
+          <p className="text-muted-foreground mt-1">Gestão de manutenção e fornecedores do edifício</p>
         </div>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -108,30 +108,34 @@ export function ManagerMaintenance() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Pendentes"
           value={pendingCount}
-          description="Aguardam atribuição"
+          subtitle="Aguardam atribuição"
           icon={Clock}
+          iconColor="warning"
         />
-        <StatsCard
+        <MetricCard
           title="Em Progresso"
           value={inProgressCount}
-          description="Fornecedores ativos"
+          subtitle="Fornecedores ativos"
           icon={Wrench}
+          iconColor="primary"
         />
-        <StatsCard
+        <MetricCard
           title="Urgentes"
           value={highUrgencyCount}
-          description="Prioridade alta"
+          subtitle="Prioridade alta"
           icon={AlertTriangle}
+          iconColor="warning"
           trend={highUrgencyCount > 0 ? { value: highUrgencyCount, isPositive: false } : undefined}
         />
-        <StatsCard
+        <MetricCard
           title="Fornecedores"
           value={mockVendors.length}
-          description="Ativos este mês"
+          subtitle="Ativos este mês"
           icon={Truck}
+          iconColor="accent"
         />
       </div>
 
@@ -139,7 +143,7 @@ export function ManagerMaintenance() {
         {/* Main Requests List */}
         <div className="lg:col-span-2 space-y-4">
           {/* Filters */}
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardContent className="p-4">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex items-center gap-2">
@@ -195,8 +199,8 @@ export function ManagerMaintenance() {
             {filteredRequests.map((request) => {
               const CategoryIcon = categoryIcons[request.category];
               return (
-                <Card key={request.id}>
-                  <CardContent className="p-4">
+              <Card key={request.id} className="glass-card rounded-2xl hover-lift">
+                <CardContent className="p-4">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div className="flex gap-3">
                         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -243,15 +247,15 @@ export function ManagerMaintenance() {
 
         {/* Vendors Sidebar */}
         <div className="space-y-4">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Fornecedores Ativos</CardTitle>
+              <CardTitle className="text-lg font-display">Fornecedores Ativos</CardTitle>
               <CardDescription>Fornecedores com trabalhos em curso</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {mockVendors.map((vendor) => (
-                  <div key={vendor.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div key={vendor.id} className="flex items-center justify-between p-3 bg-card/50 backdrop-blur-sm rounded-xl border hover:bg-muted/50 transition-colors">
                     <div>
                       <p className="font-medium text-sm">{vendor.name}</p>
                       <p className="text-xs text-muted-foreground">{vendor.specialty}</p>
@@ -270,22 +274,22 @@ export function ManagerMaintenance() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Manutenção Programada</CardTitle>
+              <CardTitle className="text-lg font-display">Manutenção Programada</CardTitle>
               <CardDescription>Próximas manutenções preventivas</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-muted/50 rounded-lg">
+                <div className="p-3 bg-card/50 backdrop-blur-sm rounded-xl border hover:bg-muted/50 transition-colors">
                   <p className="font-medium text-sm">Inspeção Elevadores</p>
                   <p className="text-xs text-muted-foreground">28 Dez 2024</p>
                 </div>
-                <div className="p-3 bg-muted/50 rounded-lg">
+                <div className="p-3 bg-card/50 backdrop-blur-sm rounded-xl border hover:bg-muted/50 transition-colors">
                   <p className="font-medium text-sm">Manutenção AVAC</p>
                   <p className="text-xs text-muted-foreground">15 Jan 2025</p>
                 </div>
-                <div className="p-3 bg-muted/50 rounded-lg">
+                <div className="p-3 bg-card/50 backdrop-blur-sm rounded-xl border hover:bg-muted/50 transition-colors">
                   <p className="font-medium text-sm">Limpeza Cisterna</p>
                   <p className="text-xs text-muted-foreground">22 Jan 2025</p>
                 </div>

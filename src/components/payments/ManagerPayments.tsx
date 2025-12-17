@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import {
   Download,
   Search,
@@ -88,37 +88,40 @@ export function ManagerPayments() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Total Cobrado"
           value={`€${totalCollected.toLocaleString()}`}
-          description="Este ano"
+          subtitle="Este ano"
           icon={CheckCircle2}
-          variant="accent"
+          iconColor="success"
         />
-        <StatsCard
+        <MetricCard
           title="Taxa Cobrança"
           value={`${collectionRate}%`}
-          description="Eficiência"
+          subtitle="Eficiência"
           icon={TrendingUp}
+          iconColor="primary"
         />
-        <StatsCard
+        <MetricCard
           title="Pendente"
           value={`€${pendingFees.toLocaleString()}`}
-          description="Quotas por pagar"
+          subtitle="Quotas por pagar"
           icon={Clock}
+          iconColor="warning"
         />
-        <StatsCard
+        <MetricCard
           title="Em Atraso"
           value={`€${overdueAmount.toLocaleString()}`}
-          description="Necessita cobrança"
+          subtitle="Necessita cobrança"
           icon={AlertTriangle}
+          iconColor="warning"
         />
       </div>
 
       {/* Building Collection Status */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-display">
             <Building2 className="h-5 w-5 text-primary" />
             Cobrança por Edifício
           </CardTitle>
@@ -154,9 +157,9 @@ export function ManagerPayments() {
 
       {/* Vendor Payments & Recent Collections */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Wrench className="h-5 w-5 text-primary" />
               Pagamentos a Fornecedores
             </CardTitle>
@@ -165,7 +168,7 @@ export function ManagerPayments() {
           <CardContent>
             <div className="space-y-3">
               {vendorPayments.map((payment) => (
-                <div key={payment.id} className="flex items-center justify-between p-3 rounded-lg border">
+                <div key={payment.id} className="flex items-center justify-between p-3 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
                   <div>
                     <p className="font-medium">{payment.vendor}</p>
                     <p className="text-sm text-muted-foreground">{payment.service}</p>
@@ -193,9 +196,9 @@ export function ManagerPayments() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Users className="h-5 w-5 text-primary" />
               Quotas Recentes
             </CardTitle>
@@ -204,7 +207,7 @@ export function ManagerPayments() {
           <CardContent>
             <div className="space-y-3">
               {recentPayments.map((payment) => (
-                <div key={payment.id} className="flex items-center justify-between p-3 rounded-lg border">
+                <div key={payment.id} className="flex items-center justify-between p-3 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
                   <div>
                     <p className="font-medium">{payment.unit} - {payment.building}</p>
                     <p className="text-sm text-muted-foreground">{payment.tenant}</p>
@@ -223,10 +226,10 @@ export function ManagerPayments() {
       </div>
 
       {/* Payment History */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Histórico de Movimentos</CardTitle>
+            <CardTitle className="font-display">Histórico de Movimentos</CardTitle>
             <CardDescription>Todas as transações financeiras</CardDescription>
           </div>
           <Button variant="outline" size="sm">
@@ -263,10 +266,10 @@ export function ManagerPayments() {
             </Select>
           </div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-xl border overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50">
+                <TableRow className="bg-muted/30">
                   <TableHead>Descrição</TableHead>
                   <TableHead>Edifício</TableHead>
                   <TableHead>Tipo</TableHead>

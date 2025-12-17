@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import {
   Download,
   Search,
@@ -91,37 +91,40 @@ export function VendorPayments() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Total Faturado"
           value={`€${totalEarned.toLocaleString()}`}
-          description="Este ano"
+          subtitle="Este ano"
           icon={CheckCircle2}
-          variant="accent"
+          iconColor="success"
         />
-        <StatsCard
+        <MetricCard
           title="Este Mês"
           value={`€${monthlyRevenue.toLocaleString()}`}
-          description="+6.3% vs mês anterior"
+          subtitle="+6.3% vs mês anterior"
           icon={TrendingUp}
+          trend={{ value: 6.3, isPositive: true }}
         />
-        <StatsCard
+        <MetricCard
           title="Pendente"
           value={`€${pendingInvoices.toLocaleString()}`}
-          description="A receber"
+          subtitle="A receber"
           icon={Clock}
+          iconColor="warning"
         />
-        <StatsCard
+        <MetricCard
           title="Em Atraso"
           value={`€${overdueAmount.toLocaleString()}`}
-          description="Necessita cobrança"
+          subtitle="Necessita cobrança"
           icon={AlertTriangle}
+          iconColor="warning"
         />
       </div>
 
       {/* Pending Invoices */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-display">
             <Clock className="h-5 w-5 text-primary" />
             Faturas Pendentes
           </CardTitle>
@@ -133,7 +136,7 @@ export function VendorPayments() {
               const daysUntil = Math.ceil((new Date(invoice.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
               
               return (
-                <div key={invoice.id} className={`p-4 rounded-lg border ${invoice.status === 'overdue' ? 'border-red-200 bg-red-50 dark:bg-red-950' : ''}`}>
+                <div key={invoice.id} className={`p-4 rounded-xl border backdrop-blur-sm hover:bg-muted/50 transition-colors ${invoice.status === 'overdue' ? 'border-destructive/30 bg-destructive/5' : 'bg-card/50'}`}>
                   <div className="flex items-center justify-between mb-3">
                     <Badge variant="outline">{invoice.id}</Badge>
                     <Badge variant={statusColors[invoice.status]}>
@@ -163,9 +166,9 @@ export function VendorPayments() {
 
       {/* Client Summary & Payment Stats */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Users className="h-5 w-5 text-primary" />
               Resumo por Cliente
             </CardTitle>
@@ -174,7 +177,7 @@ export function VendorPayments() {
           <CardContent>
             <div className="space-y-4">
               {clientSummary.map((client) => (
-                <div key={client.id} className="p-4 rounded-lg border">
+                <div key={client.id} className="p-4 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-medium">{client.name}</p>
                     <Badge variant={client.onTime >= 90 ? 'success' : 'warning'}>
@@ -192,9 +195,9 @@ export function VendorPayments() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Calendar className="h-5 w-5 text-primary" />
               Estatísticas de Pagamento
             </CardTitle>
@@ -202,7 +205,7 @@ export function VendorPayments() {
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              <div className="p-4 rounded-lg bg-muted/50">
+              <div className="p-4 rounded-xl bg-muted/50 backdrop-blur-sm">
                 <p className="text-sm text-muted-foreground">Tempo Médio de Pagamento</p>
                 <p className="text-3xl font-display font-bold">{avgPaymentTime} dias</p>
                 <p className="text-sm text-green-600 mt-1">-2 dias vs mês anterior</p>
@@ -244,10 +247,10 @@ export function VendorPayments() {
       </div>
 
       {/* Invoice History */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Histórico de Faturas</CardTitle>
+            <CardTitle className="font-display">Histórico de Faturas</CardTitle>
             <CardDescription>Todas as suas faturas emitidas</CardDescription>
           </div>
           <Button variant="outline" size="sm">
@@ -284,10 +287,10 @@ export function VendorPayments() {
             </Select>
           </div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-xl border overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50">
+                <TableRow className="bg-muted/30">
                   <TableHead>Nº Fatura</TableHead>
                   <TableHead>Cliente</TableHead>
                   <TableHead>Serviço</TableHead>

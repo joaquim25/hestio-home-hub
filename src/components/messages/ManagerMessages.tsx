@@ -152,7 +152,7 @@ export function ManagerMessages() {
         </Button>
       </div>
 
-      <Card className="h-[calc(100vh-220px)] flex overflow-hidden">
+      <Card className="h-[calc(100vh-220px)] flex overflow-hidden glass-card rounded-2xl">
         {/* Conversations List */}
         <div className="w-80 border-r flex flex-col">
           <div className="p-4 border-b space-y-3">

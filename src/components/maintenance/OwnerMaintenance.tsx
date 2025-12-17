@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import { mockMaintenanceRequests } from '@/lib/mock-data/maintenance';
 import { mockProperties } from '@/lib/mock-data/properties';
 import { 
@@ -99,42 +99,46 @@ export function OwnerMaintenance() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Manutenção</h1>
-          <p className="text-muted-foreground">Gerir pedidos de manutenção das suas propriedades</p>
+          <h1 className="font-display text-3xl font-bold text-foreground">Manutenção</h1>
+          <p className="text-muted-foreground mt-1">Gerir pedidos de manutenção das suas propriedades</p>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Pendentes"
           value={pendingCount}
-          description="Aguardam aprovação"
+          subtitle="Aguardam aprovação"
           icon={Clock}
+          iconColor="warning"
         />
-        <StatsCard
+        <MetricCard
           title="Em Progresso"
           value={inProgressCount}
-          description="A ser executados"
+          subtitle="A ser executados"
           icon={Wrench}
+          iconColor="primary"
         />
-        <StatsCard
+        <MetricCard
           title="Alta Urgência"
           value={highUrgencyCount}
-          description="Requerem atenção"
+          subtitle="Requerem atenção"
           icon={AlertTriangle}
+          iconColor="warning"
           trend={highUrgencyCount > 0 ? { value: highUrgencyCount, isPositive: false } : undefined}
         />
-        <StatsCard
+        <MetricCard
           title="Custos Est. Mês"
           value={`€${estimatedCosts.thisMonth}`}
-          description="Manutenção em curso"
+          subtitle="Manutenção em curso"
           icon={Euro}
+          iconColor="accent"
         />
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex items-center gap-2">
@@ -191,10 +195,10 @@ export function OwnerMaintenance() {
       {/* Requests List */}
       <div className="space-y-4">
         {filteredRequests.length === 0 ? (
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardContent className="py-12 text-center">
               <CheckCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">Nenhum pedido encontrado</h3>
+              <h3 className="text-lg font-medium font-display">Nenhum pedido encontrado</h3>
               <p className="text-muted-foreground">
                 Não existem pedidos de manutenção com estes filtros
               </p>
@@ -204,7 +208,7 @@ export function OwnerMaintenance() {
           filteredRequests.map((request) => {
             const CategoryIcon = categoryIcons[request.category];
             return (
-              <Card key={request.id}>
+              <Card key={request.id} className="glass-card rounded-2xl hover-lift">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                     <div className="flex gap-4">

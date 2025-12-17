@@ -29,4 +29,25 @@ export const mockUsers: User[] = [
     role: 'manager',
     phone: '+351 945 678 901',
   },
+  {
+    id: '5',
+    name: 'Empresa Gestão Lda',
+    email: 'empresa@email.com',
+    role: 'condo_company',
+    phone: '+351 956 789 012',
+  },
+  {
+    id: '6',
+    name: 'Carlos Técnico',
+    email: 'carlos@email.com',
+    role: 'vendor',
+    phone: '+351 967 890 123',
+  },
+  {
+    id: '7',
+    name: 'IHRU - Instituto',
+    email: 'ihru@email.com',
+    role: 'government',
+    phone: '+351 978 901 234',
+  },
 ];

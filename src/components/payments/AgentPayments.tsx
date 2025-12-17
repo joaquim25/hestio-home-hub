@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { mockPayments, mockProperties } from '@/lib/mock-data';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import {
   Download,
   Search,
@@ -82,38 +82,41 @@ export function AgentPayments() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Total Ganho"
           value={`€${totalCommissions.toLocaleString()}`}
-          description="Este ano"
+          subtitle="Este ano"
           icon={CheckCircle2}
-          variant="accent"
+          iconColor="success"
         />
-        <StatsCard
+        <MetricCard
           title="Este Mês"
           value={`€${currentMonthCommissions.toLocaleString()}`}
-          description="+18% vs mês anterior"
+          subtitle="+18% vs mês anterior"
           icon={TrendingUp}
+          trend={{ value: 18, isPositive: true }}
         />
-        <StatsCard
+        <MetricCard
           title="Pendente"
           value={`€${pendingCommissions.toLocaleString()}`}
-          description="A receber"
+          subtitle="A receber"
           icon={Clock}
+          iconColor="warning"
         />
-        <StatsCard
+        <MetricCard
           title="Taxa Média"
           value="2.5%"
-          description="Comissão média"
+          subtitle="Comissão média"
           icon={Percent}
+          iconColor="accent"
         />
       </div>
 
       {/* Monthly Target & Recent Transactions */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Target className="h-5 w-5 text-primary" />
               Meta Mensal
             </CardTitle>
@@ -138,9 +141,9 @@ export function AgentPayments() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Users className="h-5 w-5 text-primary" />
               Transações por Cliente
             </CardTitle>
@@ -149,7 +152,7 @@ export function AgentPayments() {
           <CardContent>
             <div className="space-y-4">
               {clientPayments.map((payment) => (
-                <div key={payment.id} className="flex items-center justify-between p-3 rounded-lg border">
+                <div key={payment.id} className="flex items-center justify-between p-3 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
                   <div>
                     <p className="font-medium">{payment.client}</p>
                     <p className="text-sm text-muted-foreground">
@@ -170,9 +173,9 @@ export function AgentPayments() {
       </div>
 
       {/* Pending Commissions */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-display">
             <Clock className="h-5 w-5 text-primary" />
             Comissões Pendentes
           </CardTitle>
@@ -181,7 +184,7 @@ export function AgentPayments() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
             {commissions.filter(c => c.status === 'pending').map((commission) => (
-              <div key={commission.id} className="flex items-center justify-between p-4 rounded-lg border bg-muted/30">
+              <div key={commission.id} className="flex items-center justify-between p-4 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
                 <div>
                   <p className="font-medium">{commission.property}</p>
                   <p className="text-sm text-muted-foreground">{commission.client}</p>
@@ -202,10 +205,10 @@ export function AgentPayments() {
       </Card>
 
       {/* Commission History */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Histórico de Comissões</CardTitle>
+            <CardTitle className="font-display">Histórico de Comissões</CardTitle>
             <CardDescription>Todas as suas comissões</CardDescription>
           </div>
           <Button variant="outline" size="sm">
@@ -241,10 +244,10 @@ export function AgentPayments() {
             </Select>
           </div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-xl border overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50">
+                <TableRow className="bg-muted/30">
                   <TableHead>Cliente</TableHead>
                   <TableHead>Imóvel</TableHead>
                   <TableHead>Tipo</TableHead>

@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import { mockMaintenanceRequests } from '@/lib/mock-data/maintenance';
 import { mockProperties } from '@/lib/mock-data/properties';
 import { 
@@ -97,41 +97,45 @@ export function VendorMaintenance() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Ordens de Trabalho</h1>
-          <p className="text-muted-foreground">Gerir trabalhos de manutenção atribuídos</p>
+          <h1 className="font-display text-3xl font-bold text-foreground">Ordens de Trabalho</h1>
+          <p className="text-muted-foreground mt-1">Gerir trabalhos de manutenção atribuídos</p>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Por Aceitar"
           value={pendingCount}
-          description="Novos trabalhos"
+          subtitle="Novos trabalhos"
           icon={Clock}
+          iconColor="warning"
         />
-        <StatsCard
+        <MetricCard
           title="Em Execução"
           value={inProgressCount}
-          description="Trabalhos ativos"
+          subtitle="Trabalhos ativos"
           icon={Wrench}
+          iconColor="primary"
         />
-        <StatsCard
+        <MetricCard
           title="Concluídos"
           value={completedCount}
-          description="Este mês"
+          subtitle="Este mês"
           icon={CheckCircle}
+          iconColor="success"
         />
-        <StatsCard
+        <MetricCard
           title="Ganhos Mês"
           value={`€${monthEarnings}`}
-          description="Faturado"
+          subtitle="Faturado"
           icon={Euro}
+          iconColor="accent"
         />
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
             <div className="flex items-center gap-2">
@@ -175,10 +179,10 @@ export function VendorMaintenance() {
       {/* Work Orders */}
       <div className="space-y-4">
         {filteredRequests.length === 0 ? (
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardContent className="py-12 text-center">
               <Wrench className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">Nenhuma ordem de trabalho</h3>
+              <h3 className="text-lg font-medium font-display">Nenhuma ordem de trabalho</h3>
               <p className="text-muted-foreground">
                 Não existem trabalhos com este filtro
               </p>
@@ -191,7 +195,7 @@ export function VendorMaintenance() {
             const jobPrice = request.urgency === 'high' ? 350 : request.urgency === 'medium' ? 180 : 95;
             
             return (
-              <Card key={request.id} className={request.status === 'pending' ? 'border-primary/50' : ''}>
+              <Card key={request.id} className={`glass-card rounded-2xl hover-lift ${request.status === 'pending' ? 'border-primary/50' : ''}`}>
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                     <div className="flex gap-4">

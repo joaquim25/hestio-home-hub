@@ -37,9 +37,9 @@ export function AgentSettings({ user }: AgentSettingsProps) {
         </TabsList>
 
         <TabsContent value="profile">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Perfil Profissional</CardTitle>
+              <CardTitle className="font-display">Perfil Profissional</CardTitle>
               <CardDescription>Informações visíveis para clientes</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -84,9 +84,9 @@ export function AgentSettings({ user }: AgentSettingsProps) {
         </TabsContent>
 
         <TabsContent value="business">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Dados Empresariais</CardTitle>
+              <CardTitle className="font-display">Dados Empresariais</CardTitle>
               <CardDescription>Informações da sua atividade</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -118,9 +118,9 @@ export function AgentSettings({ user }: AgentSettingsProps) {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Preferências de Notificações</CardTitle>
+              <CardTitle className="font-display">Preferências de Notificações</CardTitle>
               <CardDescription>Gerir alertas de negócio</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -171,9 +171,9 @@ export function AgentSettings({ user }: AgentSettingsProps) {
         </TabsContent>
 
         <TabsContent value="commissions">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Configurações de Comissões</CardTitle>
+              <CardTitle className="font-display">Configurações de Comissões</CardTitle>
               <CardDescription>Taxas e dados de pagamento</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -210,9 +210,9 @@ export function AgentSettings({ user }: AgentSettingsProps) {
         </TabsContent>
 
         <TabsContent value="security">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Segurança da Conta</CardTitle>
+              <CardTitle className="font-display">Segurança da Conta</CardTitle>
               <CardDescription>Proteja o acesso à sua conta</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

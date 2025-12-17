@@ -115,7 +115,7 @@ export function ManagerProperties({ user }: ManagerPropertiesProps) {
 
       {/* Overview Stats */}
       <div className="grid gap-4 md:grid-cols-4 mb-8">
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
+        <Card className="glass-card rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -128,7 +128,7 @@ export function ManagerProperties({ user }: ManagerPropertiesProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-success/10 to-success/5">
+        <Card className="glass-card rounded-2xl bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -141,7 +141,7 @@ export function ManagerProperties({ user }: ManagerPropertiesProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
+        <Card className="glass-card rounded-2xl bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -154,7 +154,7 @@ export function ManagerProperties({ user }: ManagerPropertiesProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
+        <Card className="glass-card rounded-2xl bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -184,7 +184,7 @@ export function ManagerProperties({ user }: ManagerPropertiesProps) {
       {/* Buildings List */}
       <div className="space-y-4">
         {filteredBuildings.map((building) => (
-          <Card key={building.id} className="hover:shadow-md transition-shadow">
+          <Card key={building.id} className="glass-card rounded-2xl hover-lift">
             <CardContent className="p-6">
               <div className="flex flex-col lg:flex-row lg:items-start gap-6">
                 {/* Building Info */}

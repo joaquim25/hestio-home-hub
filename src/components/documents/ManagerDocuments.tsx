@@ -164,10 +164,10 @@ export function ManagerDocuments() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4 mb-8">
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-primary/10">
+              <div className="p-3 rounded-xl bg-primary/15">
                 <FileText className="h-5 w-5 text-primary" />
               </div>
               <div>
@@ -177,10 +177,10 @@ export function ManagerDocuments() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-success/10">
+              <div className="p-3 rounded-xl bg-success/15">
                 <Users className="h-5 w-5 text-success" />
               </div>
               <div>
@@ -192,11 +192,11 @@ export function ManagerDocuments() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-accent/10">
-                <Wrench className="h-5 w-5 text-accent" />
+              <div className="p-3 rounded-xl bg-accent/15">
+                <Wrench className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold font-display">
@@ -207,10 +207,10 @@ export function ManagerDocuments() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="glass-card rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-warning/10">
+              <div className="p-3 rounded-xl bg-warning/15">
                 <Clock className="h-5 w-5 text-warning" />
               </div>
               <div>
@@ -225,10 +225,10 @@ export function ManagerDocuments() {
       </div>
 
       {/* Documents */}
-      <Card>
+      <Card className="glass-card rounded-2xl">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Biblioteca de Documentos</CardTitle>
+            <CardTitle className="font-display">Biblioteca de Documentos</CardTitle>
             <div className="relative w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Pesquisar documentos..." className="pl-10" />
@@ -254,7 +254,7 @@ export function ManagerDocuments() {
                     return (
                       <div
                         key={doc.id}
-                        className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors"
+                        className="flex items-center justify-between p-4 rounded-xl border bg-card/50 backdrop-blur-sm hover:bg-muted/50 transition-colors"
                       >
                         <div className="flex items-center gap-4">
                           <div className="p-2 rounded-lg bg-muted">

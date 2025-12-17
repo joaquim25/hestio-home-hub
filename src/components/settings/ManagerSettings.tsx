@@ -36,9 +36,9 @@ export function ManagerSettings({ user }: ManagerSettingsProps) {
         </TabsList>
 
         <TabsContent value="profile">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Perfil do Gestor</CardTitle>
+              <CardTitle className="font-display">Perfil do Gestor</CardTitle>
               <CardDescription>Dados pessoais e de contacto</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -73,9 +73,9 @@ export function ManagerSettings({ user }: ManagerSettingsProps) {
         </TabsContent>
 
         <TabsContent value="building">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Configurações do Edifício</CardTitle>
+              <CardTitle className="font-display">Configurações do Edifício</CardTitle>
               <CardDescription>Preferências de gestão do condomínio</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -123,9 +123,9 @@ export function ManagerSettings({ user }: ManagerSettingsProps) {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Preferências de Notificações</CardTitle>
+              <CardTitle className="font-display">Preferências de Notificações</CardTitle>
               <CardDescription>Alertas de gestão do condomínio</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -176,9 +176,9 @@ export function ManagerSettings({ user }: ManagerSettingsProps) {
         </TabsContent>
 
         <TabsContent value="vendors">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Gestão de Fornecedores</CardTitle>
+              <CardTitle className="font-display">Gestão de Fornecedores</CardTitle>
               <CardDescription>Preferências de contacto com prestadores</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -214,9 +214,9 @@ export function ManagerSettings({ user }: ManagerSettingsProps) {
         </TabsContent>
 
         <TabsContent value="security">
-          <Card>
+          <Card className="glass-card rounded-2xl">
             <CardHeader>
-              <CardTitle>Segurança da Conta</CardTitle>
+              <CardTitle className="font-display">Segurança da Conta</CardTitle>
               <CardDescription>Proteja o acesso à sua conta</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { Menu, X, Home, Building2, CreditCard, Wrench, FileText, MessageSquare, Settings, BarChart3, ChevronDown } from 'lucide-react';
+import { Menu, X, Home, Building2, CreditCard, Wrench, FileText, MessageSquare, Settings, BarChart3, ChevronDown, Users, Calendar, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { UserRole } from '@/types';
@@ -70,6 +70,7 @@ export function Navbar() {
         return [
           { href: '/dashboard', label: 'Dashboard', icon: Home },
           { href: '/properties', label: 'Imóveis', icon: Building2 },
+          { href: '/clients', label: 'Clientes', icon: Users },
           { href: '/payments', label: 'Comissões', icon: CreditCard },
           { href: '/reports', label: 'Relatórios', icon: BarChart3 },
           ...commonItems,
@@ -78,6 +79,8 @@ export function Navbar() {
         return [
           { href: '/dashboard', label: 'Dashboard', icon: Home },
           { href: '/properties', label: 'Edifícios', icon: Building2 },
+          { href: '/clients', label: 'Condóminos', icon: Users },
+          { href: '/schedule', label: 'Agenda', icon: Calendar },
           { href: '/maintenance', label: 'Manutenção', icon: Wrench },
           { href: '/payments', label: 'Despesas', icon: CreditCard },
           ...commonItems,
@@ -93,6 +96,7 @@ export function Navbar() {
       case 'vendor':
         return [
           { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/schedule', label: 'Agenda', icon: Calendar },
           { href: '/maintenance', label: 'Ordens de Trabalho', icon: Wrench },
           { href: '/payments', label: 'Faturação', icon: CreditCard },
           ...commonItems,
@@ -101,6 +105,7 @@ export function Navbar() {
         return [
           { href: '/dashboard', label: 'Dashboard', icon: Home },
           { href: '/properties', label: 'Habitação Social', icon: Building2 },
+          { href: '/applications', label: 'Candidaturas', icon: ClipboardList },
           { href: '/payments', label: 'Rendas', icon: CreditCard },
           { href: '/maintenance', label: 'Manutenção', icon: Wrench },
           { href: '/reports', label: 'Relatórios', icon: BarChart3 },

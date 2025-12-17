@@ -15,6 +15,9 @@ import Maintenance from "./pages/Maintenance";
 import Documents from "./pages/Documents";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
+import Clients from "./pages/Clients";
+import Applications from "./pages/Applications";
+import Schedule from "./pages/Schedule";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +41,9 @@ const App = () => (
             <Route path="/documents" element={<Documents />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/applications" element={<Applications />} />
+            <Route path="/schedule" element={<Schedule />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

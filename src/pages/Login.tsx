@@ -44,20 +44,20 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center p-8 bg-gradient-page">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
             <Link to="/" className="inline-flex items-center gap-2 mb-8">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-hero">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-hero shadow-soft">
                 <Home className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="font-display text-2xl font-bold text-foreground">Hestio</span>
             </Link>
-            <h1 className="font-display text-3xl font-bold text-foreground">Bem-vindo de volta</h1>
+            <h1 className="font-display text-3xl text-foreground">Bem-vindo de volta</h1>
             <p className="mt-2 text-muted-foreground">Entre na sua conta para continuar</p>
           </div>
 
-          <Card className="border-0 shadow-soft-lg">
+          <Card className="border-border/30 bg-card/80 backdrop-blur-sm shadow-soft-lg">
             <CardContent className="pt-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">

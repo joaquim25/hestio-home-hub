@@ -1,0 +1,266 @@
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { StatsCard } from '@/components/dashboard/StatsCard';
+import { mockMaintenanceRequests } from '@/lib/mock-data/maintenance';
+import { mockProperties } from '@/lib/mock-data/properties';
+import { 
+  Wrench, 
+  Clock, 
+  CheckCircle, 
+  AlertTriangle,
+  Droplets,
+  Zap,
+  Wind,
+  Building,
+  Settings,
+  HelpCircle,
+  Calendar,
+  Users,
+  Phone,
+  Filter
+} from 'lucide-react';
+
+const categoryIcons = {
+  plumbing: Droplets,
+  electrical: Zap,
+  hvac: Wind,
+  structural: Building,
+  appliance: Settings,
+  other: HelpCircle,
+};
+
+const categoryLabels = {
+  plumbing: 'Canalização',
+  electrical: 'Eletricidade',
+  hvac: 'Climatização',
+  structural: 'Estrutural',
+  appliance: 'Eletrodomésticos',
+  other: 'Outro',
+};
+
+const urgencyLabels = {
+  low: 'Baixa',
+  medium: 'Média',
+  high: 'Alta',
+};
+
+const urgencyVariants = {
+  low: 'secondary' as const,
+  medium: 'default' as const,
+  high: 'destructive' as const,
+};
+
+const statusLabels = {
+  pending: 'Pendente',
+  'in-progress': 'Em Progresso',
+  completed: 'Concluído',
+};
+
+const statusVariants = {
+  pending: 'secondary' as const,
+  'in-progress': 'default' as const,
+  completed: 'outline' as const,
+};
+
+export function AgentMaintenance() {
+  const [filter, setFilter] = useState<'all' | 'pending' | 'in-progress' | 'completed'>('all');
+  const [clientFilter, setClientFilter] = useState<string>('all');
+
+  const requests = mockMaintenanceRequests;
+  const filteredRequests = filter === 'all' 
+    ? requests 
+    : requests.filter(r => r.status === filter);
+
+  const pendingCount = requests.filter(r => r.status === 'pending').length;
+  const inProgressCount = requests.filter(r => r.status === 'in-progress').length;
+  const completedCount = requests.filter(r => r.status === 'completed').length;
+  const highUrgencyCount = requests.filter(r => r.urgency === 'high' && r.status !== 'completed').length;
+
+  const getPropertyTitle = (propertyId: string) => {
+    const property = mockProperties.find(p => p.id === propertyId);
+    return property?.title || 'Propriedade';
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Manutenção</h1>
+          <p className="text-muted-foreground">Coordenar manutenção das propriedades geridas</p>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <StatsCard
+          title="Pendentes"
+          value={pendingCount}
+          description="Aguardam ação"
+          icon={Clock}
+        />
+        <StatsCard
+          title="Em Progresso"
+          value={inProgressCount}
+          description="A decorrer"
+          icon={Wrench}
+        />
+        <StatsCard
+          title="Alta Urgência"
+          value={highUrgencyCount}
+          description="Prioridade"
+          icon={AlertTriangle}
+        />
+        <StatsCard
+          title="Concluídos Mês"
+          value={completedCount}
+          description="Este mês"
+          icon={CheckCircle}
+        />
+      </div>
+
+      {/* Filters */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium">Filtros:</span>
+            </div>
+            <Select value={clientFilter} onValueChange={setClientFilter}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Todos os clientes" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os clientes</SelectItem>
+                <SelectItem value="client1">João Silva (Proprietário)</SelectItem>
+                <SelectItem value="client2">Maria Santos (Proprietária)</SelectItem>
+                <SelectItem value="client3">Pedro Costa (Proprietário)</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant={filter === 'all' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilter('all')}
+              >
+                Todos ({requests.length})
+              </Button>
+              <Button
+                variant={filter === 'pending' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilter('pending')}
+              >
+                Pendentes ({pendingCount})
+              </Button>
+              <Button
+                variant={filter === 'in-progress' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilter('in-progress')}
+              >
+                Em Progresso ({inProgressCount})
+              </Button>
+              <Button
+                variant={filter === 'completed' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilter('completed')}
+              >
+                Concluídos ({completedCount})
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Requests List */}
+      <div className="space-y-4">
+        {filteredRequests.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <CheckCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium">Nenhum pedido encontrado</h3>
+              <p className="text-muted-foreground">
+                Não existem pedidos de manutenção com estes filtros
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          filteredRequests.map((request) => {
+            const CategoryIcon = categoryIcons[request.category];
+            return (
+              <Card key={request.id}>
+                <CardContent className="p-6">
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                    <div className="flex gap-4">
+                      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <CategoryIcon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-medium">{categoryLabels[request.category]}</h3>
+                          <Badge variant={urgencyVariants[request.urgency]}>
+                            {urgencyLabels[request.urgency]}
+                          </Badge>
+                          <Badge variant={statusVariants[request.status]}>
+                            {statusLabels[request.status]}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {request.description}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 flex-wrap">
+                          <span className="flex items-center gap-1">
+                            <Building className="h-3 w-3" />
+                            {getPropertyTitle(request.propertyId)}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Users className="h-3 w-3" />
+                            Proprietário: João Silva
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {new Date(request.createdAt).toLocaleDateString('pt-PT')}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 ml-auto flex-wrap">
+                      {request.status === 'pending' && (
+                        <>
+                          <Button variant="default" size="sm">
+                            Coordenar
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <Phone className="h-4 w-4 mr-1" />
+                            Contactar
+                          </Button>
+                        </>
+                      )}
+                      {request.status === 'in-progress' && (
+                        <>
+                          <Button variant="outline" size="sm">
+                            Acompanhar
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            Atualizar Cliente
+                          </Button>
+                        </>
+                      )}
+                      {request.status === 'completed' && (
+                        <Button variant="outline" size="sm">
+                          Ver Relatório
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}

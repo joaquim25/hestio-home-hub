@@ -1,5 +1,4 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
 import { 
   Home, 
   Building2, 
@@ -15,18 +14,24 @@ import {
   HardHat,
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Menu
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { UserRole } from '@/types';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
 
 const roleLabels: Record<UserRole, string> = {
   tenant: 'Inquilino',
@@ -122,7 +127,12 @@ interface AppSidebarProps {
   onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarProps) {
+// Sidebar content component (shared between desktop and mobile)
+function SidebarContent({ 
+  collapsed, 
+  onCollapsedChange,
+  onNavigate 
+}: AppSidebarProps & { onNavigate?: () => void }) {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navItems = getNavItems(user?.role);
@@ -134,6 +144,7 @@ export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarP
     const linkContent = (
       <Link
         to={item.href}
+        onClick={onNavigate}
         className={cn(
           "flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative",
           isActive 
@@ -155,7 +166,7 @@ export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarP
       return (
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
-            {linkContent}
+            <div>{linkContent}</div>
           </TooltipTrigger>
           <TooltipContent side="right" className="font-medium">
             {item.label}
@@ -168,12 +179,7 @@ export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarP
   };
 
   return (
-    <aside 
-      className={cn(
-        "fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border flex flex-col transition-all duration-300 z-50",
-        collapsed ? "w-[72px]" : "w-64"
-      )}
-    >
+    <div className="flex flex-col h-full">
       {/* Logo */}
       <div className={cn(
         "flex items-center h-16 border-b border-sidebar-border px-4",
@@ -240,6 +246,20 @@ export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarP
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+// Desktop Sidebar
+export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarProps) {
+  return (
+    <aside 
+      className={cn(
+        "fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border flex-col transition-all duration-300 z-50 hidden md:flex",
+        collapsed ? "w-[72px]" : "w-64"
+      )}
+    >
+      <SidebarContent collapsed={collapsed} onCollapsedChange={onCollapsedChange} />
 
       {/* Collapse Toggle */}
       <button
@@ -253,5 +273,22 @@ export function AppSidebar({ collapsed = false, onCollapsedChange }: AppSidebarP
         )}
       </button>
     </aside>
+  );
+}
+
+// Mobile Sidebar Trigger
+export function MobileSidebarTrigger() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="p-0 w-64 bg-sidebar">
+        <SidebarContent collapsed={false} />
+      </SheetContent>
+    </Sheet>
   );
 }

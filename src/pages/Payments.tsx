@@ -1,6 +1,5 @@
-import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { AppLayout } from '@/components/layout/AppLayout';
 import { TenantPayments } from '@/components/payments/TenantPayments';
 import { OwnerPayments } from '@/components/payments/OwnerPayments';
 import { AgentPayments } from '@/components/payments/AgentPayments';
@@ -10,11 +9,7 @@ import { VendorPayments } from '@/components/payments/VendorPayments';
 import { GovernmentPayments } from '@/components/payments/GovernmentPayments';
 
 export default function Payments() {
-  const { user, isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  const { user } = useAuth();
 
   const renderPaymentsContent = () => {
     switch (user?.role) {
@@ -38,11 +33,8 @@ export default function Payments() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8">
-        {renderPaymentsContent()}
-      </main>
-    </div>
+    <AppLayout>
+      {renderPaymentsContent()}
+    </AppLayout>
   );
 }

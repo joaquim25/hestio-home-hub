@@ -4,8 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Home, Eye, EyeOff, Loader2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Login() {
@@ -41,23 +41,36 @@ export default function Login() {
     }
   };
 
+  const demoAccounts = [
+    { label: '🏠 Inquilino', email: 'joao@email.com' },
+    { label: '🏢 Proprietário', email: 'maria@email.com' },
+    { label: '🔑 Agente', email: 'pedro@email.com' },
+    { label: '🏛️ Gestor Cond.', email: 'ana@email.com' },
+    { label: '🏗️ Empresa Cond.', email: 'empresa@email.com' },
+    { label: '🔧 Prestador', email: 'carlos@email.com' },
+  ];
+
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-gradient-page">
-        <div className="w-full max-w-md space-y-8">
+      <div className="flex-1 flex items-center justify-center p-8 bg-gradient-page relative overflow-hidden">
+        {/* Decorative blobs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-[100px]" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/15 rounded-full blur-[100px]" />
+        
+        <div className="w-full max-w-md space-y-8 relative z-10">
           <div className="text-center">
-            <Link to="/" className="inline-flex items-center gap-2 mb-8">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-hero shadow-soft">
+            <Link to="/" className="inline-flex items-center gap-2.5 mb-8">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary shadow-soft">
                 <Home className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="font-display text-2xl font-bold text-foreground">Hestio</span>
             </Link>
-            <h1 className="font-display text-3xl text-foreground">Bem-vindo de volta</h1>
+            <h1 className="font-display text-3xl font-bold text-foreground">Bem-vindo de volta</h1>
             <p className="mt-2 text-muted-foreground">Entre na sua conta para continuar</p>
           </div>
 
-          <Card className="border-border/30 bg-card/80 backdrop-blur-sm shadow-soft-lg">
+          <Card className="glass-card border-border/30 shadow-soft-lg">
             <CardContent className="pt-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
@@ -92,7 +105,7 @@ export default function Login() {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -100,94 +113,37 @@ export default function Login() {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                <Button type="submit" className="w-full rounded-xl shadow-soft" disabled={isLoading}>
+                  {isLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
                   Entrar
                 </Button>
               </form>
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t border-border/50" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Contas Demo</span>
+                  <span className="bg-card/80 backdrop-blur-sm px-3 text-muted-foreground rounded-full">Contas Demo</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEmail('joao@email.com');
-                    setPassword('demo123');
-                  }}
-                  className="text-xs"
-                >
-                  🏠 Inquilino
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEmail('maria@email.com');
-                    setPassword('demo123');
-                  }}
-                  className="text-xs"
-                >
-                  🏢 Proprietário
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEmail('pedro@email.com');
-                    setPassword('demo123');
-                  }}
-                  className="text-xs"
-                >
-                  🔑 Agente
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEmail('ana@email.com');
-                    setPassword('demo123');
-                  }}
-                  className="text-xs"
-                >
-                  🏛️ Gestor Cond.
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEmail('empresa@email.com');
-                    setPassword('demo123');
-                  }}
-                  className="text-xs"
-                >
-                  🏗️ Empresa Cond.
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEmail('carlos@email.com');
-                    setPassword('demo123');
-                  }}
-                  className="text-xs"
-                >
-                  🔧 Prestador
-                </Button>
+                {demoAccounts.map((account) => (
+                  <Button
+                    key={account.email}
+                    variant="outline"
+                    size="sm"
+                    type="button"
+                    onClick={() => {
+                      setEmail(account.email);
+                      setPassword('demo123');
+                    }}
+                    className="text-xs rounded-xl bg-card/50 backdrop-blur-sm border-border/50 hover:bg-muted/50"
+                  >
+                    {account.label}
+                  </Button>
+                ))}
                 <Button
                   variant="outline"
                   size="sm"
@@ -196,7 +152,7 @@ export default function Login() {
                     setEmail('ihru@email.com');
                     setPassword('demo123');
                   }}
-                  className="text-xs col-span-2"
+                  className="text-xs col-span-2 rounded-xl bg-card/50 backdrop-blur-sm border-border/50 hover:bg-muted/50"
                 >
                   🏛️ Entidade Pública
                 </Button>
@@ -204,14 +160,14 @@ export default function Login() {
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t border-border/50" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Ou continue com</span>
+                  <span className="bg-card/80 backdrop-blur-sm px-3 text-muted-foreground rounded-full">Ou continue com</span>
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full" type="button">
+              <Button variant="outline" className="w-full rounded-xl bg-card/50 backdrop-blur-sm border-border/50" type="button">
                 <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                   <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -245,12 +201,20 @@ export default function Login() {
       </div>
 
       {/* Right Side - Image/Branding */}
-      <div className="hidden lg:flex flex-1 bg-gradient-hero items-center justify-center p-12">
-        <div className="max-w-md text-center text-primary-foreground">
-          <h2 className="font-display text-4xl font-bold mb-6">
+      <div className="hidden lg:flex flex-1 bg-primary items-center justify-center p-12 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-foreground/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-foreground/5 rounded-full blur-[80px]" />
+        
+        <div className="max-w-md text-center text-primary-foreground relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm mb-8">
+            <Sparkles className="h-4 w-4" />
+            <span className="text-sm font-medium">Gestão simplificada</span>
+          </div>
+          <h2 className="font-display text-4xl font-bold mb-6 leading-tight">
             Gerir imóveis nunca foi tão simples
           </h2>
-          <p className="text-primary-foreground/80 text-lg">
+          <p className="text-primary-foreground/80 text-lg leading-relaxed">
             Aceda ao seu dashboard personalizado e tenha controlo total sobre 
             os seus imóveis, pagamentos e comunicações.
           </p>

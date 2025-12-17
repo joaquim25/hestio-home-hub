@@ -92,13 +92,24 @@ export default function Maintenance() {
     return <Navigate to="/login" replace />;
   }
 
-  const filteredRequests = filter === 'all' 
-    ? mockMaintenanceRequests 
-    : mockMaintenanceRequests.filter(r => r.status === filter);
+  // Filter requests based on role
+  const userRequests = user?.role === 'tenant'
+    ? mockMaintenanceRequests.filter(r => r.tenantId === '1')
+    : mockMaintenanceRequests;
 
-  const pendingCount = mockMaintenanceRequests.filter(r => r.status === 'pending').length;
-  const inProgressCount = mockMaintenanceRequests.filter(r => r.status === 'in-progress').length;
-  const completedCount = mockMaintenanceRequests.filter(r => r.status === 'completed').length;
+  const filteredRequests = filter === 'all' 
+    ? userRequests 
+    : userRequests.filter(r => r.status === filter);
+
+  const pendingCount = userRequests.filter(r => r.status === 'pending').length;
+  const inProgressCount = userRequests.filter(r => r.status === 'in-progress').length;
+  const completedCount = userRequests.filter(r => r.status === 'completed').length;
+
+  // Tenant-specific text
+  const pageTitle = user?.role === 'tenant' ? 'Reportar Problemas' : 'Manutenção';
+  const pageDescription = user?.role === 'tenant' 
+    ? 'Submeta e acompanhe os seus pedidos de manutenção'
+    : 'Gerencie pedidos de manutenção dos seus imóveis';
 
   return (
     <div className="min-h-screen bg-background">
@@ -107,17 +118,15 @@ export default function Maintenance() {
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Manutenção</h1>
-            <p className="text-muted-foreground mt-1">
-              Gerencie pedidos de manutenção dos seus imóveis
-            </p>
+            <h1 className="font-display text-3xl font-bold text-foreground">{pageTitle}</h1>
+            <p className="text-muted-foreground mt-1">{pageDescription}</p>
           </div>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Novo Pedido
+              <Button size="lg">
+                <Plus className="h-5 w-5 mr-2" />
+                {user?.role === 'tenant' ? 'Reportar Problema' : 'Novo Pedido'}
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">

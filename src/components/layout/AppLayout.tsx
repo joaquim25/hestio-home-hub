@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { AppSidebar } from './AppSidebar';
+import { AppSidebar, MobileSidebarTrigger } from './AppSidebar';
 import { cn } from '@/lib/utils';
 import { UserRole } from '@/types';
 import {
@@ -55,12 +55,13 @@ export function AppLayout({ children }: AppLayoutProps) {
       
       <div className={cn(
         "transition-all duration-300",
-        collapsed ? "ml-[72px]" : "ml-64"
+        "ml-0 md:ml-64",
+        collapsed && "md:ml-[72px]"
       )}>
         {/* Top Bar with Role Switcher */}
-        <header className="sticky top-0 z-40 h-16 bg-card/60 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6">
-          <div>
-            {/* Page title could go here */}
+        <header className="sticky top-0 z-40 h-16 bg-card/60 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-4 md:px-6">
+          <div className="flex items-center gap-2">
+            <MobileSidebarTrigger />
           </div>
           
           {/* Role Switcher for Demo */}
@@ -94,7 +95,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         </header>
 
         {/* Main Content */}
-        <main className="p-6">
+        <main className="p-4 md:p-6">
           {children}
         </main>
       </div>

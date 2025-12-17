@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Bell, Shield, CreditCard, Home } from 'lucide-react';
+import { User, Bell, Shield, CreditCard } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -23,8 +23,11 @@ interface TenantSettingsProps {
 
 export function TenantSettings({ user }: TenantSettingsProps) {
   return (
-    <>
-      <h1 className="font-display text-3xl font-bold text-foreground mb-8">Definições</h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="font-display text-3xl font-bold text-foreground">Definições</h1>
+        <p className="text-muted-foreground mt-1">Gerencie as suas preferências e conta</p>
+      </div>
 
       <Tabs defaultValue="profile">
         <TabsList className="mb-6">
@@ -35,9 +38,9 @@ export function TenantSettings({ user }: TenantSettingsProps) {
         </TabsList>
 
         <TabsContent value="profile">
-          <Card>
+          <Card className="glass-card">
             <CardHeader>
-              <CardTitle>Informações Pessoais</CardTitle>
+              <CardTitle className="font-display">Informações Pessoais</CardTitle>
               <CardDescription>Atualize os seus dados de contacto</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -73,62 +76,42 @@ export function TenantSettings({ user }: TenantSettingsProps) {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <Card>
+          <Card className="glass-card">
             <CardHeader>
-              <CardTitle>Preferências de Notificações</CardTitle>
+              <CardTitle className="font-display">Preferências de Notificações</CardTitle>
               <CardDescription>Escolha como quer ser notificado</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Lembretes de Renda</p>
-                  <p className="text-sm text-muted-foreground">Receber lembrete antes do vencimento</p>
+              {[
+                { title: 'Lembretes de Renda', desc: 'Receber lembrete antes do vencimento', checked: true },
+                { title: 'Atualizações de Manutenção', desc: 'Estado dos pedidos de manutenção', checked: true },
+                { title: 'Mensagens do Senhorio', desc: 'Notificar quando receber mensagens', checked: true },
+                { title: 'Documentos', desc: 'Novos documentos ou assinaturas pendentes', checked: true },
+                { title: 'Notificações por Email', desc: 'Receber resumo diário por email', checked: false },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-muted/30">
+                  <div>
+                    <p className="font-medium">{item.title}</p>
+                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  </div>
+                  <Switch defaultChecked={item.checked} />
                 </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Atualizações de Manutenção</p>
-                  <p className="text-sm text-muted-foreground">Estado dos pedidos de manutenção</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Mensagens do Senhorio</p>
-                  <p className="text-sm text-muted-foreground">Notificar quando receber mensagens</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Documentos</p>
-                  <p className="text-sm text-muted-foreground">Novos documentos ou assinaturas pendentes</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Notificações por Email</p>
-                  <p className="text-sm text-muted-foreground">Receber resumo diário por email</p>
-                </div>
-                <Switch />
-              </div>
+              ))}
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="payments">
-          <Card>
+          <Card className="glass-card">
             <CardHeader>
-              <CardTitle>Métodos de Pagamento</CardTitle>
+              <CardTitle className="font-display">Métodos de Pagamento</CardTitle>
               <CardDescription>Gerir formas de pagamento da renda</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-4 border rounded-lg">
+              <div className="p-4 rounded-xl border bg-card/50 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-muted rounded">
+                    <div className="p-2 rounded-xl bg-muted/50">
                       <CreditCard className="h-5 w-5" />
                     </div>
                     <div>
@@ -139,7 +122,7 @@ export function TenantSettings({ user }: TenantSettingsProps) {
                   <Button variant="outline" size="sm">Editar</Button>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30">
                 <div>
                   <p className="font-medium">Pagamento Automático</p>
                   <p className="text-sm text-muted-foreground">Debitar automaticamente no dia do vencimento</p>
@@ -152,9 +135,9 @@ export function TenantSettings({ user }: TenantSettingsProps) {
         </TabsContent>
 
         <TabsContent value="security">
-          <Card>
+          <Card className="glass-card">
             <CardHeader>
-              <CardTitle>Segurança da Conta</CardTitle>
+              <CardTitle className="font-display">Segurança da Conta</CardTitle>
               <CardDescription>Proteja a sua conta</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -170,7 +153,7 @@ export function TenantSettings({ user }: TenantSettingsProps) {
                 <Label>Confirmar Nova Palavra-passe</Label>
                 <Input type="password" />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30">
                 <div>
                   <p className="font-medium">Autenticação de Dois Fatores</p>
                   <p className="text-sm text-muted-foreground">Adicione segurança extra à sua conta</p>
@@ -182,6 +165,6 @@ export function TenantSettings({ user }: TenantSettingsProps) {
           </Card>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 }

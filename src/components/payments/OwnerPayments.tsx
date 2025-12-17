@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { mockPayments, mockProperties } from '@/lib/mock-data';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import {
   Download,
   Search,
@@ -15,7 +15,6 @@ import {
   Users,
   PieChart,
   ArrowUpRight,
-  ArrowDownRight,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -85,38 +84,35 @@ export function OwnerPayments() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Total Recebido"
           value={`€${totalReceived.toLocaleString()}`}
-          description="Este ano"
           icon={CheckCircle2}
-          variant="accent"
+          trend={{ value: 12, isPositive: true }}
         />
-        <StatsCard
+        <MetricCard
           title="Receita Mensal"
           value={`€${monthlyIncome.toLocaleString()}`}
-          description={`${Number(incomeChange) >= 0 ? '+' : ''}${incomeChange}% vs mês anterior`}
           icon={TrendingUp}
+          trend={{ value: Number(incomeChange), isPositive: Number(incomeChange) >= 0 }}
         />
-        <StatsCard
+        <MetricCard
           title="Pendente"
           value={`€${totalPending.toLocaleString()}`}
-          description="A aguardar"
           icon={Clock}
         />
-        <StatsCard
+        <MetricCard
           title="Em Atraso"
           value={`€${totalOverdue.toLocaleString()}`}
-          description="Necessita cobrança"
           icon={AlertTriangle}
         />
       </div>
 
       {/* Collection Rate & Income by Property */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="glass-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <TrendingUp className="h-5 w-5 text-primary" />
               Taxa de Cobrança
             </CardTitle>
@@ -133,16 +129,16 @@ export function OwnerPayments() {
               </div>
               <Progress value={collectionRate} className="h-3" />
               <div className="grid grid-cols-3 gap-4 pt-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-green-600">8</p>
+                <div className="text-center p-3 rounded-xl bg-success/10">
+                  <p className="text-2xl font-bold text-success">8</p>
                   <p className="text-xs text-muted-foreground">Pagos</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-yellow-600">1</p>
+                <div className="text-center p-3 rounded-xl bg-warning/10">
+                  <p className="text-2xl font-bold text-warning">1</p>
                   <p className="text-xs text-muted-foreground">Pendentes</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-red-600">0</p>
+                <div className="text-center p-3 rounded-xl bg-destructive/10">
+                  <p className="text-2xl font-bold text-destructive">0</p>
                   <p className="text-xs text-muted-foreground">Em Atraso</p>
                 </div>
               </div>
@@ -150,9 +146,9 @@ export function OwnerPayments() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Building2 className="h-5 w-5 text-primary" />
               Receita por Imóvel
             </CardTitle>
@@ -186,9 +182,9 @@ export function OwnerPayments() {
       </div>
 
       {/* Upcoming Payments */}
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-display">
             <Clock className="h-5 w-5 text-primary" />
             Rendas a Receber
           </CardTitle>
@@ -201,9 +197,9 @@ export function OwnerPayments() {
               const daysUntil = Math.ceil((new Date(payment.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
               
               return (
-                <div key={payment.id} className="flex items-center justify-between p-4 rounded-lg border">
+                <div key={payment.id} className="flex items-center justify-between p-4 rounded-xl border bg-card/50 backdrop-blur-sm">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                       <Users className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -225,10 +221,10 @@ export function OwnerPayments() {
       </Card>
 
       {/* Payment History */}
-      <Card>
+      <Card className="glass-card">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Histórico de Receitas</CardTitle>
+            <CardTitle className="font-display">Histórico de Receitas</CardTitle>
             <CardDescription>Todas as rendas recebidas</CardDescription>
           </div>
           <Button variant="outline" size="sm">
@@ -266,10 +262,10 @@ export function OwnerPayments() {
             </Select>
           </div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-xl border overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50">
+                <TableRow className="bg-muted/30">
                   <TableHead>Imóvel</TableHead>
                   <TableHead>Inquilino</TableHead>
                   <TableHead>Data</TableHead>

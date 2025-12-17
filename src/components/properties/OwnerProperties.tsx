@@ -70,9 +70,9 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
   const totalRevenue = ownerProperties.filter(p => p.status === 'occupied').reduce((acc, p) => acc + p.price, 0);
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-foreground">
             Os Meus Imóveis
@@ -88,59 +88,67 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
       </div>
 
       {/* Portfolio Stats */}
-      <div className="grid gap-4 md:grid-cols-4 mb-8">
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card className="glass-card bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Imóveis</p>
                 <p className="text-3xl font-bold font-display">{ownerProperties.length}</p>
               </div>
-              <Building2 className="h-8 w-8 text-primary/50" />
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Building2 className="h-6 w-6 text-primary" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-success/10 to-success/5">
+        <Card className="glass-card bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Taxa Ocupação</p>
                 <p className="text-3xl font-bold font-display">{occupancyRate}%</p>
               </div>
-              <Users className="h-8 w-8 text-success/50" />
+              <div className="p-3 rounded-xl bg-success/10">
+                <Users className="h-6 w-6 text-success" />
+              </div>
             </div>
             <Progress value={occupancyRate} className="mt-3 h-2 [&>div]:bg-success" />
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
+        <Card className="glass-card bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Receita Mensal</p>
                 <p className="text-3xl font-bold font-display">€{totalRevenue.toLocaleString('pt-PT')}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-accent/50" />
+              <div className="p-3 rounded-xl bg-accent/10">
+                <TrendingUp className="h-6 w-6 text-accent" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
+        <Card className="glass-card bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Manutenção</p>
                 <p className="text-3xl font-bold font-display">{maintenanceCount}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-warning/50" />
+              <div className="p-3 rounded-xl bg-warning/10">
+                <AlertTriangle className="h-6 w-6 text-warning" />
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -166,7 +174,7 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
       {/* Properties List */}
       <div className="space-y-4">
         {filteredProperties.map((property) => (
-          <Card key={property.id} className="hover:shadow-md transition-shadow">
+          <Card key={property.id} className="glass-card hover:shadow-soft-lg transition-all duration-300">
             <CardContent className="p-0">
               <div className="flex flex-col md:flex-row">
                 {/* Property Image */}
@@ -174,7 +182,7 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
                   <img
                     src={property.images[0]}
                     alt={property.title}
-                    className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
+                    className="w-full h-full object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-t-none"
                   />
                 </div>
 
@@ -183,7 +191,7 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-lg">{property.title}</h3>
+                        <h3 className="font-display font-semibold text-lg">{property.title}</h3>
                         <Badge variant={statusConfig[property.status].variant}>
                           {statusConfig[property.status].label}
                         </Badge>
@@ -235,9 +243,9 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
 
                   {/* Tenant Info (if occupied) */}
                   {property.status === 'occupied' && (
-                    <div className="p-3 rounded-lg bg-muted/50 flex items-center justify-between">
+                    <div className="p-3 rounded-xl bg-muted/30 backdrop-blur-sm flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                           <Users className="h-4 w-4 text-primary" />
                         </div>
                         <div>
@@ -267,18 +275,22 @@ export function OwnerProperties({ user }: OwnerPropertiesProps) {
       </div>
 
       {filteredProperties.length === 0 && (
-        <div className="text-center py-16">
-          <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="font-semibold text-lg mb-2">Nenhum imóvel encontrado</h3>
-          <p className="text-muted-foreground mb-4">
-            Adicione o seu primeiro imóvel para começar.
-          </p>
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Adicionar Imóvel
-          </Button>
-        </div>
+        <Card className="glass-card">
+          <CardContent className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl bg-muted/50 mx-auto mb-4 flex items-center justify-center">
+              <Building2 className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <h3 className="font-display font-semibold text-lg mb-2">Nenhum imóvel encontrado</h3>
+            <p className="text-muted-foreground mb-4">
+              Adicione o seu primeiro imóvel para começar.
+            </p>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Adicionar Imóvel
+            </Button>
+          </CardContent>
+        </Card>
       )}
-    </main>
+    </div>
   );
 }

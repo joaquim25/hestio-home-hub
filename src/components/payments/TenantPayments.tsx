@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { mockPayments, mockProperties } from '@/lib/mock-data';
-import { StatsCard } from '@/components/dashboard/StatsCard';
+import { MetricCard } from '@/components/dashboard/MetricCard';
 import {
   CreditCard,
   Download,
@@ -71,37 +71,33 @@ export function TenantPayments() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+        <MetricCard
           title="Total Pago"
           value={`€${totalPaid.toLocaleString()}`}
-          description="Este ano"
           icon={CheckCircle2}
-          variant="accent"
+          trend={{ value: 12, isPositive: true }}
         />
-        <StatsCard
+        <MetricCard
           title="Renda Mensal"
           value={`€${monthlyRent}`}
-          description="Valor atual"
           icon={Wallet}
         />
-        <StatsCard
+        <MetricCard
           title="Pendente"
           value={`€${totalPending.toLocaleString()}`}
-          description="Por pagar"
           icon={Clock}
         />
-        <StatsCard
+        <MetricCard
           title="Em Atraso"
           value={`€${totalOverdue.toLocaleString()}`}
-          description="Requer atenção"
           icon={AlertTriangle}
         />
       </div>
 
       {/* Payment Progress */}
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-display">
             <TrendingDown className="h-5 w-5 text-primary" />
             Progresso Anual
           </CardTitle>
@@ -123,9 +119,9 @@ export function TenantPayments() {
 
       {/* Next Payment */}
       {tenantPayments.filter(p => p.status === 'pending').length > 0 && (
-        <Card className="border-primary/20 bg-primary/5">
+        <Card className="glass-card border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display">
               <Clock className="h-5 w-5 text-primary" />
               Próximo Pagamento
             </CardTitle>
@@ -138,9 +134,9 @@ export function TenantPayments() {
                 const daysUntil = Math.ceil((new Date(payment.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
                 
                 return (
-                  <div key={payment.id} className="flex items-center justify-between p-5 rounded-xl border bg-card">
+                  <div key={payment.id} className="flex items-center justify-between p-5 rounded-2xl border bg-card/50 backdrop-blur-sm">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
                         <Calendar className="h-7 w-7 text-primary" />
                       </div>
                       <div>
@@ -169,17 +165,17 @@ export function TenantPayments() {
       )}
 
       {/* Payment Methods */}
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-display">
             <CreditCard className="h-5 w-5" />
             Métodos de Pagamento
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between p-4 rounded-lg border">
+          <div className="flex items-center justify-between p-4 rounded-xl border bg-muted/30">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
                 <CreditCard className="h-6 w-6" />
               </div>
               <div>
@@ -196,10 +192,10 @@ export function TenantPayments() {
       </Card>
 
       {/* Payment History */}
-      <Card>
+      <Card className="glass-card">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Histórico de Rendas</CardTitle>
+            <CardTitle className="font-display">Histórico de Rendas</CardTitle>
             <CardDescription>Todas as suas rendas pagas</CardDescription>
           </div>
           <Button variant="outline" size="sm">
@@ -226,10 +222,10 @@ export function TenantPayments() {
             </Select>
           </div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-xl border overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50">
+                <TableRow className="bg-muted/30">
                   <TableHead>Descrição</TableHead>
                   <TableHead>Imóvel</TableHead>
                   <TableHead>Data</TableHead>

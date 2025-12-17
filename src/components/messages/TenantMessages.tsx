@@ -116,18 +116,18 @@ export function TenantMessages() {
   };
 
   return (
-    <>
-      <div className="mb-6">
+    <div className="space-y-6">
+      <div>
         <h1 className="font-display text-3xl font-bold text-foreground">Mensagens</h1>
         <p className="text-muted-foreground mt-1">
           Comunique com o seu senhorio, agentes e serviços de manutenção
         </p>
       </div>
 
-      <Card className="h-[calc(100vh-220px)] flex overflow-hidden">
+      <Card className="glass-card h-[calc(100vh-220px)] flex overflow-hidden">
         {/* Conversations List */}
-        <div className="w-80 border-r flex flex-col">
-          <div className="p-4 border-b">
+        <div className="w-80 border-r border-border/50 flex flex-col">
+          <div className="p-4 border-b border-border/50">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Pesquisar conversas..." className="pl-10" />
@@ -141,13 +141,13 @@ export function TenantMessages() {
                 onClick={() => setSelectedConversation(conversation)}
                 className={`flex items-center gap-3 p-4 cursor-pointer transition-colors ${
                   selectedConversation.id === conversation.id
-                    ? 'bg-muted'
-                    : 'hover:bg-muted/50'
+                    ? 'bg-primary/10'
+                    : 'hover:bg-muted/30'
                 }`}
               >
                 <div className="relative">
                   <Avatar>
-                    <AvatarFallback className="bg-primary text-primary-foreground">
+                    <AvatarFallback className="bg-primary/10 text-primary">
                       {conversation.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
@@ -181,11 +181,11 @@ export function TenantMessages() {
         {/* Chat Area */}
         <div className="flex-1 flex flex-col">
           {/* Chat Header */}
-          <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center justify-between p-4 border-b border-border/50">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <Avatar>
-                  <AvatarFallback className="bg-primary text-primary-foreground">
+                  <AvatarFallback className="bg-primary/10 text-primary">
                     {selectedConversation.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
@@ -228,7 +228,7 @@ export function TenantMessages() {
                       className={`max-w-[70%] rounded-2xl px-4 py-2 ${
                         isOwn
                           ? 'bg-primary text-primary-foreground rounded-br-sm'
-                          : 'bg-muted rounded-bl-sm'
+                          : 'bg-muted/50 backdrop-blur-sm rounded-bl-sm'
                       }`}
                     >
                       <p className="text-sm">{message.content}</p>
@@ -243,7 +243,7 @@ export function TenantMessages() {
           </ScrollArea>
 
           {/* Message Input */}
-          <form onSubmit={handleSendMessage} className="p-4 border-t">
+          <form onSubmit={handleSendMessage} className="p-4 border-t border-border/50">
             <div className="flex items-center gap-2">
               <Button type="button" variant="ghost" size="icon">
                 <Paperclip className="h-4 w-4" />
@@ -261,6 +261,6 @@ export function TenantMessages() {
           </form>
         </div>
       </Card>
-    </>
+    </div>
   );
 }

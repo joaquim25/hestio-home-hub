@@ -89,9 +89,9 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
     priceRange[0] > 0 || priceRange[1] < 5000 || bedrooms !== 'all';
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="mb-8">
+      <div>
         <h1 className="font-display text-3xl font-bold text-foreground">
           Encontrar Casa
         </h1>
@@ -102,11 +102,13 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
 
       {/* Saved Searches Banner */}
       {savedSearches.length > 0 && (
-        <Card className="mb-6 border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
+        <Card className="glass-card border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
           <CardContent className="py-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
-                <Bell className="h-5 w-5 text-primary" />
+                <div className="p-2.5 rounded-xl bg-primary/10">
+                  <Bell className="h-5 w-5 text-primary" />
+                </div>
                 <div>
                   <p className="font-medium text-sm">Pesquisas Guardadas</p>
                   <p className="text-xs text-muted-foreground">
@@ -114,7 +116,7 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 {savedSearches.map((search) => (
                   <Badge key={search.id} variant="secondary" className="cursor-pointer hover:bg-secondary/80">
                     {search.name}
@@ -131,7 +133,7 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
       )}
 
       {/* Search and Filters Bar */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -278,7 +280,7 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
         </div>
 
         {/* View Mode Toggle */}
-        <div className="hidden md:flex border rounded-lg p-1">
+        <div className="hidden md:flex border rounded-xl p-1 bg-muted/30">
           <Button
             variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
             size="icon"
@@ -297,7 +299,7 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
       </div>
 
       {/* Results Count */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           {filteredProperties.length} imóveis disponíveis
         </p>
@@ -322,7 +324,7 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="absolute top-4 right-4 bg-background/80 hover:bg-background"
+                className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm hover:bg-background rounded-xl"
               >
                 <Heart className={`h-4 w-4 ${favoritedIds.includes(property.id) ? 'fill-destructive text-destructive' : ''}`} />
               </Button>
@@ -330,19 +332,21 @@ export function TenantProperties({ user }: TenantPropertiesProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16">
-          <div className="w-16 h-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
-            <Search className="h-6 w-6 text-muted-foreground" />
-          </div>
-          <h3 className="font-semibold text-lg mb-2">Nenhum imóvel encontrado</h3>
-          <p className="text-muted-foreground mb-4">
-            Tente ajustar os filtros para encontrar mais resultados.
-          </p>
-          <Button variant="outline" onClick={clearFilters}>
-            Limpar Filtros
-          </Button>
-        </div>
+        <Card className="glass-card">
+          <CardContent className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl bg-muted/50 mx-auto mb-4 flex items-center justify-center">
+              <Search className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <h3 className="font-display font-semibold text-lg mb-2">Nenhum imóvel encontrado</h3>
+            <p className="text-muted-foreground mb-4">
+              Tente ajustar os filtros para encontrar mais resultados.
+            </p>
+            <Button variant="outline" onClick={clearFilters}>
+              Limpar Filtros
+            </Button>
+          </CardContent>
+        </Card>
       )}
-    </main>
+    </div>
   );
 }

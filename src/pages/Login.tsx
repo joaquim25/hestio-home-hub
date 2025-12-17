@@ -162,7 +162,43 @@ export default function Login() {
                   }}
                   className="text-xs"
                 >
-                  🏛️ Gestor
+                  🏛️ Gestor Cond.
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('empresa@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs"
+                >
+                  🏗️ Empresa Cond.
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('carlos@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs"
+                >
+                  🔧 Prestador
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setEmail('ihru@email.com');
+                    setPassword('demo123');
+                  }}
+                  className="text-xs col-span-2"
+                >
+                  🏛️ Entidade Pública
                 </Button>
               </div>
 

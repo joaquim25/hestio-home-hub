@@ -19,14 +19,20 @@ const roleLabels: Record<UserRole, string> = {
   tenant: 'Inquilino',
   owner: 'Proprietário',
   agent: 'Agente',
-  manager: 'Gestor',
+  manager: 'Gestor Condomínio',
+  condo_company: 'Empresa Condomínios',
+  vendor: 'Prestador Serviços',
+  government: 'Entidade Pública',
 };
 
-const roleColors: Record<UserRole, 'default' | 'secondary' | 'accent' | 'success'> = {
+const roleColors: Record<UserRole, 'default' | 'secondary' | 'accent' | 'success' | 'warning' | 'destructive'> = {
   tenant: 'default',
   owner: 'accent',
   agent: 'secondary',
   manager: 'success',
+  condo_company: 'warning',
+  vendor: 'default',
+  government: 'destructive',
 };
 
 export function Navbar() {
@@ -75,6 +81,30 @@ export function Navbar() {
           { href: '/payments', label: 'Despesas', icon: CreditCard },
           ...commonItems,
         ];
+      case 'condo_company':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/properties', label: 'Condomínios', icon: Building2 },
+          { href: '/payments', label: 'Finanças', icon: CreditCard },
+          { href: '/reports', label: 'Relatórios', icon: BarChart3 },
+          ...commonItems,
+        ];
+      case 'vendor':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/maintenance', label: 'Ordens de Trabalho', icon: Wrench },
+          { href: '/payments', label: 'Faturação', icon: CreditCard },
+          ...commonItems,
+        ];
+      case 'government':
+        return [
+          { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/properties', label: 'Habitação Social', icon: Building2 },
+          { href: '/payments', label: 'Rendas', icon: CreditCard },
+          { href: '/maintenance', label: 'Manutenção', icon: Wrench },
+          { href: '/reports', label: 'Relatórios', icon: BarChart3 },
+          ...commonItems,
+        ];
       default:
         return [
           { href: '/properties', label: 'Imóveis', icon: Building2 },
@@ -83,7 +113,7 @@ export function Navbar() {
   };
 
   const navItems = getNavItems(user?.role);
-  const roles: UserRole[] = ['tenant', 'owner', 'agent', 'manager'];
+  const roles: UserRole[] = ['tenant', 'owner', 'agent', 'manager', 'condo_company', 'vendor', 'government'];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">

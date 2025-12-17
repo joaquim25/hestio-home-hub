@@ -1,17 +1,12 @@
-import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
+import { AppLayout } from '@/components/layout/AppLayout';
 import { Navigate } from 'react-router-dom';
 import { AgentClients } from '@/components/clients/AgentClients';
 import { ManagerClients } from '@/components/clients/ManagerClients';
 
 export default function Clients() {
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Only agents and managers can access this page
   if (user?.role !== 'agent' && user?.role !== 'manager') {
     return <Navigate to="/dashboard" replace />;
   }
@@ -28,11 +23,8 @@ export default function Clients() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8">
-        {renderClientsContent()}
-      </main>
-    </div>
+    <AppLayout>
+      {renderClientsContent()}
+    </AppLayout>
   );
 }

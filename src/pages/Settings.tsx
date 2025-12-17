@@ -1,6 +1,5 @@
-import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { AppLayout } from '@/components/layout/AppLayout';
 import { TenantSettings } from '@/components/settings/TenantSettings';
 import { OwnerSettings } from '@/components/settings/OwnerSettings';
 import { AgentSettings } from '@/components/settings/AgentSettings';
@@ -10,11 +9,7 @@ import { VendorSettings } from '@/components/settings/VendorSettings';
 import { GovernmentSettings } from '@/components/settings/GovernmentSettings';
 
 export default function Settings() {
-  const { user, isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  const { user } = useAuth();
 
   const renderSettingsContent = () => {
     switch (user?.role) {
@@ -38,11 +33,10 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+    <AppLayout>
+      <div className="max-w-4xl">
         {renderSettingsContent()}
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 }

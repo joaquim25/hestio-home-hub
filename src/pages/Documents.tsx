@@ -1,6 +1,5 @@
-import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { AppLayout } from '@/components/layout/AppLayout';
 import { TenantDocuments } from '@/components/documents/TenantDocuments';
 import { OwnerDocuments } from '@/components/documents/OwnerDocuments';
 import { AgentDocuments } from '@/components/documents/AgentDocuments';
@@ -10,11 +9,7 @@ import { VendorDocuments } from '@/components/documents/VendorDocuments';
 import { GovernmentDocuments } from '@/components/documents/GovernmentDocuments';
 
 export default function Documents() {
-  const { isAuthenticated, user } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  const { user } = useAuth();
 
   const renderDocumentsContent = () => {
     switch (user?.role) {
@@ -38,11 +33,8 @@ export default function Documents() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8">
-        {renderDocumentsContent()}
-      </main>
-    </div>
+    <AppLayout>
+      {renderDocumentsContent()}
+    </AppLayout>
   );
 }

@@ -1,6 +1,5 @@
-import { Navbar } from '@/components/layout/Navbar';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { AppLayout } from '@/components/layout/AppLayout';
 import { TenantMessages } from '@/components/messages/TenantMessages';
 import { OwnerMessages } from '@/components/messages/OwnerMessages';
 import { AgentMessages } from '@/components/messages/AgentMessages';
@@ -10,11 +9,7 @@ import { VendorMessages } from '@/components/messages/VendorMessages';
 import { GovernmentMessages } from '@/components/messages/GovernmentMessages';
 
 export default function Messages() {
-  const { isAuthenticated, user } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  const { user } = useAuth();
 
   const renderMessagesContent = () => {
     switch (user?.role) {
@@ -38,11 +33,8 @@ export default function Messages() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8">
-        {renderMessagesContent()}
-      </main>
-    </div>
+    <AppLayout>
+      {renderMessagesContent()}
+    </AppLayout>
   );
 }

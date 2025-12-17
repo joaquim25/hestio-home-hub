@@ -52,6 +52,7 @@ export function Navbar() {
       case 'tenant':
         return [
           { href: '/dashboard', label: 'Dashboard', icon: Home },
+          { href: '/properties', label: 'Procurar Imóveis', icon: Building2 },
           { href: '/payments', label: 'Pagamentos', icon: CreditCard },
           { href: '/maintenance', label: 'Manutenção', icon: Wrench },
           ...commonItems,

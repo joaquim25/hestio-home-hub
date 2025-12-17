@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { Menu, X, Home, Building2, CreditCard, Wrench, FileText, MessageSquare, Settings, BarChart3, ChevronDown, Users, Calendar, ClipboardList } from 'lucide-react';
+import { Menu, X, Home, Building2, CreditCard, Wrench, FileText, MessageSquare, Settings, BarChart3, ChevronDown, Users, Calendar, ClipboardList, HardHat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { UserRole } from '@/types';
@@ -80,6 +80,7 @@ export function Navbar() {
           { href: '/dashboard', label: 'Dashboard', icon: Home },
           { href: '/properties', label: 'Edifícios', icon: Building2 },
           { href: '/clients', label: 'Condóminos', icon: Users },
+          { href: '/vendors', label: 'Fornecedores', icon: HardHat },
           { href: '/schedule', label: 'Agenda', icon: Calendar },
           { href: '/maintenance', label: 'Manutenção', icon: Wrench },
           { href: '/payments', label: 'Despesas', icon: CreditCard },
@@ -89,6 +90,7 @@ export function Navbar() {
         return [
           { href: '/dashboard', label: 'Dashboard', icon: Home },
           { href: '/properties', label: 'Condomínios', icon: Building2 },
+          { href: '/vendors', label: 'Fornecedores', icon: HardHat },
           { href: '/payments', label: 'Finanças', icon: CreditCard },
           { href: '/reports', label: 'Relatórios', icon: BarChart3 },
           ...commonItems,

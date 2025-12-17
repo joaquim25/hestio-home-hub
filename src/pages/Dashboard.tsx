@@ -4,6 +4,7 @@ import { StatsCard } from '@/components/dashboard/StatsCard';
 import { TenantDashboard } from '@/components/dashboard/TenantDashboard';
 import { OwnerDashboard } from '@/components/dashboard/OwnerDashboard';
 import { AgentDashboard } from '@/components/dashboard/AgentDashboard';
+import { ManagerDashboard } from '@/components/dashboard/ManagerDashboard';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -443,7 +444,17 @@ export default function Dashboard() {
     );
   }
 
-  // Manager Dashboard (simplified) - default fallback
+  // Manager Dashboard
+  if (user?.role === 'manager') {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <ManagerDashboard user={user} />
+      </div>
+    );
+  }
+
+  // Default fallback
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -453,85 +464,16 @@ export default function Dashboard() {
             Olá, {user?.name} 👋
           </h1>
           <p className="text-muted-foreground mt-1">
-            Painel de gestão de condomínio
+            Bem-vindo ao Hestio
           </p>
         </div>
-
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <StatsCard
-            title="Edifícios"
-            value="5"
-            description="Em gestão"
-            icon={Building2}
-            variant="primary"
-          />
-          <StatsCard
-            title="Residentes"
-            value="120"
-            description="Total de frações"
-            icon={Users}
-          />
-          <StatsCard
-            title="Despesas Comuns"
-            value="€8,500"
-            description="Este mês"
-            icon={DollarSign}
-          />
-          <StatsCard
-            title="Reuniões"
-            value="2"
-            description="Agendadas"
-            icon={Calendar}
-            variant="accent"
-          />
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Edifícios Geridos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {['Edifício Aurora', 'Condomínio Sol Nascente', 'Residencial Jardins', 'Torre Atlântico', 'Vila Verde'].map((building) => (
-                  <div key={building} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                    <div className="flex items-center gap-3">
-                      <Building2 className="h-5 w-5 text-muted-foreground" />
-                      <span className="font-medium text-sm">{building}</span>
-                    </div>
-                    <Badge variant="success">Ativo</Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Próximas Reuniões</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 rounded-lg border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Assembleia Geral - Ed. Aurora</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">15 Jan 2025, 19:00</p>
-                  <p className="text-sm text-muted-foreground mt-1">Ordem: Aprovação de contas 2024</p>
-                </div>
-                <div className="p-4 rounded-lg border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Reunião Extraordinária - Vila Verde</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">22 Jan 2025, 18:30</p>
-                  <p className="text-sm text-muted-foreground mt-1">Ordem: Obras no elevador</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-muted-foreground">
+              Selecione um perfil no menu para aceder ao dashboard correspondente.
+            </p>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );

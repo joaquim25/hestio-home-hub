@@ -107,13 +107,13 @@ export function GovernmentDashboard({ user }: GovernmentDashboardProps) {
   const avgOccupancy = Math.round(housingByDistrict.reduce((acc, d) => acc + d.occupancy, 0) / housingByDistrict.length);
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold text-foreground">
+      <div>
+        <h1 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">
           Olá, {user.name}
         </h1>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-muted-foreground mt-2">
           Painel de Gestão de Habitação Social — Visão geral do programa
         </p>
       </div>
@@ -496,6 +496,6 @@ export function GovernmentDashboard({ user }: GovernmentDashboardProps) {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

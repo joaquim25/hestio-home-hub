@@ -177,14 +177,14 @@ export function VendorDashboard({ user }: VendorDashboardProps) {
   const avgRating = (mockClients.reduce((acc, c) => acc + c.rating, 0) / mockClients.length).toFixed(1);
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-3xl font-bold text-foreground">
-            Olá, {user.name}! 👋
+          <h1 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">
+            Olá, {user.name}
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-2">
             Painel de prestador de serviços
           </p>
         </div>
@@ -605,6 +605,6 @@ export function VendorDashboard({ user }: VendorDashboardProps) {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 }

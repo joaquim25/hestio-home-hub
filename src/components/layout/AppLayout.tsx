@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { AppSidebar, MobileSidebarTrigger } from './AppSidebar';
@@ -36,14 +36,24 @@ const roleColors: Record<UserRole, 'default' | 'secondary' | 'accent' | 'success
   government: 'destructive',
 };
 
+const SIDEBAR_COLLAPSED_KEY = 'hestio.sidebar.collapsed';
+
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const [collapsed, setCollapsed] = useState(false);
+  // Persisted to avoid resetting on route changes (each page mounts its own AppLayout)
+  const [collapsed, setCollapsed] = useState(() => {
+    const saved = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+    return saved === 'true';
+  });
   const { user, isAuthenticated, switchRole } = useAuth();
   const roles: UserRole[] = ['tenant', 'owner', 'agent', 'manager', 'condo_company', 'vendor', 'government'];
+
+  useEffect(() => {
+    localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(collapsed));
+  }, [collapsed]);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -53,11 +63,13 @@ export function AppLayout({ children }: AppLayoutProps) {
     <div className="min-h-screen bg-gradient-page">
       <AppSidebar collapsed={collapsed} onCollapsedChange={setCollapsed} />
       
-      <div className={cn(
-        "transition-all duration-300",
-        "ml-0 md:ml-64",
-        collapsed && "md:ml-[72px]"
-      )}>
+      <div
+        className={cn(
+          'transition-all duration-300',
+          'ml-0 md:ml-64',
+          collapsed && 'md:ml-[72px]'
+        )}
+      >
         {/* Top Bar with Role Switcher */}
         <header className="sticky top-0 z-40 h-16 bg-card/60 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-2">
@@ -102,3 +114,4 @@ export function AppLayout({ children }: AppLayoutProps) {
     </div>
   );
 }
+

@@ -6,6 +6,7 @@ import { OwnerDashboard } from '@/components/dashboard/OwnerDashboard';
 import { AgentDashboard } from '@/components/dashboard/AgentDashboard';
 import { ManagerDashboard } from '@/components/dashboard/ManagerDashboard';
 import { CondoCompanyDashboard } from '@/components/dashboard/CondoCompanyDashboard';
+import { VendorDashboard } from '@/components/dashboard/VendorDashboard';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -132,108 +133,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="font-display text-3xl font-bold text-foreground">
-              Olá, {user.name} 👋
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Painel de prestador de serviços
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-            <StatsCard
-              title="Ordens Ativas"
-              value="7"
-              description="Por executar"
-              icon={Wrench}
-              variant="primary"
-            />
-            <StatsCard
-              title="Concluídas"
-              value="23"
-              description="Este mês"
-              icon={CheckCircle2}
-              variant="accent"
-            />
-            <StatsCard
-              title="Faturação"
-              value="€3,450"
-              description="Este mês"
-              icon={DollarSign}
-              trend={{ value: 12, isPositive: true }}
-            />
-            <StatsCard
-              title="Avaliação"
-              value="4.8"
-              description="Média de clientes"
-              icon={TrendingUp}
-            />
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Ordens de Trabalho</CardTitle>
-                <CardDescription>Serviços pendentes</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { service: 'Reparação canalização', location: 'Ed. Aurora, Fração 3B', urgency: 'high', date: '17 Dez' },
-                    { service: 'Manutenção elevador', location: 'Cond. Sol Nascente', urgency: 'medium', date: '18 Dez' },
-                    { service: 'Pintura áreas comuns', location: 'Residencial Jardins', urgency: 'low', date: '20 Dez' },
-                  ].map((order, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
-                      <div className="flex items-center gap-4">
-                        <Wrench className="h-5 w-5 text-muted-foreground" />
-                        <div>
-                          <p className="font-medium text-sm">{order.service}</p>
-                          <p className="text-xs text-muted-foreground">{order.location}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <Badge variant={order.urgency === 'high' ? 'destructive' : order.urgency === 'medium' ? 'warning' : 'secondary'}>
-                          {order.urgency === 'high' ? 'Urgente' : order.urgency === 'medium' ? 'Médio' : 'Normal'}
-                        </Badge>
-                        <p className="text-xs text-muted-foreground mt-1">{order.date}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Faturação Recente</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { invoice: 'FAT-2024-089', client: 'Cond. Vila Verde', amount: '€580', status: 'paid' },
-                    { invoice: 'FAT-2024-088', client: 'Ed. Aurora', amount: '€320', status: 'pending' },
-                    { invoice: 'FAT-2024-087', client: 'Torre Atlântico', amount: '€890', status: 'paid' },
-                  ].map((inv, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                      <div>
-                        <p className="font-medium text-sm">{inv.invoice}</p>
-                        <p className="text-xs text-muted-foreground">{inv.client}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-display font-semibold">{inv.amount}</p>
-                        <Badge variant={inv.status === 'paid' ? 'success' : 'warning'}>
-                          {inv.status === 'paid' ? 'Pago' : 'Pendente'}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+        <VendorDashboard user={user} />
       </div>
     );
   }

@@ -1,0 +1,338 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+
+    function hasAnyRole(roles) {
+      return isAuthenticated() && getUserRole() in roles;
+    }
+
+    function isPropertyOwner(propertyData) {
+      return isAuthenticated() && propertyData.ownerId == request.auth.uid;
+    }
+
+    function isPropertyAgent(propertyData) {
+      return isAuthenticated() && propertyData.agentId == request.auth.uid;
+    }
+
+    function isPropertyManager(propertyData) {
+      return isAuthenticated() && propertyData.managerId == request.auth.uid;
+    }
+
+    function isPropertyTenant(propertyData) {
+      return isAuthenticated() && propertyData.currentTenantId == request.auth.uid;
+    }
+
+    function hasPropertyAccess(propertyData) {
+      return isPropertyOwner(propertyData) 
+        || isPropertyAgent(propertyData) 
+        || isPropertyManager(propertyData) 
+        || isPropertyTenant(propertyData);
+    }
+
+    // ============================================
+    // USERS COLLECTION
+    // ============================================
+    match /users/{userId} {
+      // Anyone authenticated can read basic user info (needed for displaying names in UI)
+      allow read: if isAuthenticated();
+      
+      // Users can only create their own document
+      allow create: if isOwner(userId) 
+        && request.resource.data.keys().hasAll(['email', 'displayName', 'role']);
+      
+      // Users can only update their own document
+      // Cannot change role after creation (prevents privilege escalation)
+      allow update: if isOwner(userId) 
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']));
+      
+      // Users cannot delete their own account (must use admin)
+      allow delete: if false;
+    }
+
+    // ============================================
+    // PROPERTIES COLLECTION
+    // ============================================
+    match /properties/{propertyId} {
+      // All authenticated users can read (for browsing listings)
+      allow read: if isAuthenticated();
+      
+      // Only owners, agents, and managers can create properties
+      allow create: if isAuthenticated() 
+        && hasAnyRole(['owner', 'agent', 'manager'])
+        && request.resource.data.ownerId == request.auth.uid;
+      
+      // Only property owner, agent, or manager can update
+      allow update: if isAuthenticated() 
+        && hasPropertyAccess(resource.data)
+        // Cannot change ownership
+        && request.resource.data.ownerId == resource.data.ownerId;
+      
+      // Only property owner can delete
+      allow delete: if isAuthenticated() && isPropertyOwner(resource.data);
+    }
+
+    // ============================================
+    // LEASES COLLECTION
+    // ============================================
+    match /leases/{leaseId} {
+      // Only parties involved in the lease can read
+      allow read: if isAuthenticated() && (
+        resource.data.tenantId == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.agentId == request.auth.uid
+      );
+      
+      // Only owners, agents can create leases
+      allow create: if isAuthenticated() 
+        && hasAnyRole(['owner', 'agent', 'manager'])
+        && (request.resource.data.ownerId == request.auth.uid 
+            || request.resource.data.agentId == request.auth.uid);
+      
+      // Owner, agent, or tenant can update (for signatures)
+      allow update: if isAuthenticated() && (
+        resource.data.tenantId == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.agentId == request.auth.uid
+      );
+      
+      // Only owner can delete
+      allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ============================================
+    // PAYMENTS COLLECTION
+    // ============================================
+    match /payments/{paymentId} {
+      // Only tenant, owner, or agent can read payment
+      allow read: if isAuthenticated() && (
+        resource.data.tenantId == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid ||
+        hasRole('agent') ||
+        hasRole('manager')
+      );
+      
+      // Only owners, agents, managers, and Cloud Functions can create
+      allow create: if isAuthenticated() 
+        && (hasAnyRole(['owner', 'agent', 'manager']) || request.auth.token.admin == true);
+      
+      // Tenant can update to mark as processing/completed (via Stripe)
+      // Owner/agent can update status
+      allow update: if isAuthenticated() && (
+        resource.data.tenantId == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid ||
+        hasAnyRole(['agent', 'manager']) ||
+        request.auth.token.admin == true
+      );
+      
+      // Only owner can delete
+      allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ============================================
+    // MAINTENANCE COLLECTION
+    // ============================================
+    match /maintenance/{maintenanceId} {
+      // Parties involved can read: reporter, property owner/agent/manager, assigned vendor
+      allow read: if isAuthenticated() && (
+        resource.data.reportedBy == request.auth.uid ||
+        resource.data.assignedTo == request.auth.uid ||
+        isPropertyOwner(get(/databases/$(database)/documents/properties/$(resource.data.propertyId)).data) ||
+        isPropertyAgent(get(/databases/$(database)/documents/properties/$(resource.data.propertyId)).data) ||
+        isPropertyManager(get(/databases/$(database)/documents/properties/$(resource.data.propertyId)).data)
+      );
+      
+      // Tenants, owners, agents, managers can create
+      allow create: if isAuthenticated() 
+        && hasAnyRole(['tenant', 'owner', 'agent', 'manager'])
+        && request.resource.data.reportedBy == request.auth.uid;
+      
+      // Reporter, property owner/agent/manager, and assigned vendor can update
+      allow update: if isAuthenticated() && (
+        resource.data.reportedBy == request.auth.uid ||
+        resource.data.assignedTo == request.auth.uid ||
+        hasAnyRole(['owner', 'agent', 'manager'])
+      );
+      
+      // Only property owner or manager can delete
+      allow delete: if isAuthenticated() && hasAnyRole(['owner', 'manager']);
+    }
+
+    // ============================================
+    // CONVERSATIONS COLLECTION
+    // ============================================
+    match /conversations/{conversationId} {
+      // Only participants can read
+      allow read: if isAuthenticated() 
+        && request.auth.uid in resource.data.participants;
+      
+      // Any authenticated user can create (initiating conversation)
+      allow create: if isAuthenticated() 
+        && request.auth.uid in request.resource.data.participants;
+      
+      // Only participants can update
+      allow update: if isAuthenticated() 
+        && request.auth.uid in resource.data.participants;
+      
+      // Participants can delete their conversations
+      allow delete: if isAuthenticated() 
+        && request.auth.uid in resource.data.participants;
+    }
+
+    // ============================================
+    // MESSAGES COLLECTION (Top-level)
+    // ============================================
+    match /messages/{messageId} {
+      // Only participants in the conversation can read
+      allow read: if isAuthenticated() && (
+        request.auth.uid in get(/databases/$(database)/documents/conversations/$(resource.data.conversationId)).data.participants
+      );
+      
+      // Only participants can create messages
+      allow create: if isAuthenticated() 
+        && request.auth.uid in get(/databases/$(database)/documents/conversations/$(request.resource.data.conversationId)).data.participants
+        && request.resource.data.senderId == request.auth.uid;
+      
+      // Only sender can update their own message (for read receipts)
+      allow update: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid ||
+        request.auth.uid in get(/databases/$(database)/documents/conversations/$(resource.data.conversationId)).data.participants
+      );
+      
+      // Only sender can delete
+      allow delete: if isAuthenticated() && resource.data.senderId == request.auth.uid;
+    }
+
+    // ============================================
+    // NOTIFICATIONS COLLECTION
+    // ============================================
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // System/Cloud Functions can create
+      allow create: if request.auth.token.admin == true 
+        || (isAuthenticated() && request.resource.data.userId == request.auth.uid);
+      
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own notifications
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ============================================
+    // DOCUMENTS COLLECTION
+    // ============================================
+    match /documents/{documentId} {
+      // Owner and related parties can read
+      allow read: if isAuthenticated() && (
+        resource.data.ownerId == request.auth.uid ||
+        // If related to a property, check property access
+        (resource.data.relatedTo.type == 'property' && 
+         hasPropertyAccess(get(/databases/$(database)/documents/properties/$(resource.data.relatedTo.id)).data)) ||
+        // If related to a lease
+        (resource.data.relatedTo.type == 'lease' && 
+         request.auth.uid in [
+           get(/databases/$(database)/documents/leases/$(resource.data.relatedTo.id)).data.tenantId,
+           get(/databases/$(database)/documents/leases/$(resource.data.relatedTo.id)).data.ownerId,
+           get(/databases/$(database)/documents/leases/$(resource.data.relatedTo.id)).data.agentId
+         ])
+      );
+      
+      // Only authenticated users can create documents they own
+      allow create: if isAuthenticated() 
+        && request.resource.data.ownerId == request.auth.uid;
+      
+      // Only owner can update
+      allow update: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+      
+      // Only owner can delete
+      allow delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ============================================
+    // APPLICATIONS COLLECTION
+    // ============================================
+    match /applications/{applicationId} {
+      // Applicant, property owner, and agents can read
+      allow read: if isAuthenticated() && (
+        resource.data.applicantId == request.auth.uid ||
+        isPropertyOwner(get(/databases/$(database)/documents/properties/$(resource.data.propertyId)).data) ||
+        isPropertyAgent(get(/databases/$(database)/documents/properties/$(resource.data.propertyId)).data) ||
+        isPropertyManager(get(/databases/$(database)/documents/properties/$(resource.data.propertyId)).data)
+      );
+      
+      // Only tenants can create applications
+      allow create: if isAuthenticated() 
+        && hasRole('tenant')
+        && request.resource.data.applicantId == request.auth.uid;
+      
+      // Applicant can update (submit documents)
+      // Property owner/agent can update (review)
+      allow update: if isAuthenticated() && (
+        resource.data.applicantId == request.auth.uid ||
+        hasAnyRole(['owner', 'agent', 'manager'])
+      );
+      
+      // Only applicant can delete (withdraw)
+      allow delete: if isAuthenticated() && resource.data.applicantId == request.auth.uid;
+    }
+
+    // ============================================
+    // VENDORS COLLECTION
+    // ============================================
+    match /vendors/{vendorId} {
+      // All authenticated users can read (for finding vendors)
+      allow read: if isAuthenticated();
+      
+      // Only users with vendor role can create
+      allow create: if isAuthenticated() 
+        && hasRole('vendor')
+        && request.resource.data.userId == request.auth.uid;
+      
+      // Only the vendor can update their profile
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Only the vendor can delete their profile
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ============================================
+    // SUBSCRIPTIONS COLLECTION (Stripe)
+    // ============================================
+    match /subscriptions/{subscriptionId} {
+      // Users can only read their own subscriptions
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // System/Cloud Functions can create
+      allow create: if request.auth.token.admin == true;
+      
+      // System can update
+      allow update: if request.auth.token.admin == true;
+      
+      // No one can delete subscriptions
+      allow delete: if false;
+    }
+  }
+}
